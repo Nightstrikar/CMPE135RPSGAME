@@ -47,8 +47,10 @@ void whoWon(string user, string comp){
 int main(int argc, const char * argv[]) {
     // insert code here...
     string which = "smart";
-        Chooser *chooser = ChooserFactory::make_chooser(which);
+    Chooser *chooser = ChooserFactory::make_chooser(which);
+    bool play = true;
 
+    while (play) {
         int i = 0;
         string userChoice = "";
         while(i<20){
@@ -61,6 +63,11 @@ int main(int argc, const char * argv[]) {
             whoWon(userChoice,compChoice);
             i++;
         }
+        //cout << "Do you want to play again? (y/n) ";
+        //cin >> play;
+        //play = (play == 'y' || play == 'Y');
+
+    }
 
 
     

@@ -15,6 +15,7 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
     static vector<string> choices(N); //We are using this to store the amount of choices previously made
     static unordered_map<string, int> freq; //This is going to to be used for the frequencies of each sequence
     //vector<string> seq;
+    static unordered_map<string, int> choiceFreq;
     
     //When we do not have enough choices to make a sequence then we run this to just do a
     //random choice like in the random chooser function (maybe in the future we can just call
@@ -62,6 +63,7 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
             }
         }
         
+        choiceFreq[user_choice]++;//The choice from the user will now updates the choice frequency
         
         string max_seq = "";
         int max_freq = 0;
@@ -75,7 +77,6 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
             //Then we are going to see if the seq and frequenct stored in the max variables if
             //something new gets located
             if (seq.back() == user_choice[0] && (f > max_freq)){
-                
                 max_seq = seq;
                 max_freq = f;
             }
@@ -104,10 +105,32 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
                 //Now in this string we are going to be storing the next_choice the player might
                 //make that is given from the string max_seq and then it will choose the move to
                 //given the parameter below
-                string next_choice = max_seq.substr(N, string::npos);
-                if (next_choice == "rock"){
-                    return "paper";
+                //string next_choice = max_seq.substr(N, string::npos);
+            //Now we figuring out what choice will happen most often
+            unordered_map<string, int> next_choice_find;
+            
+            for (int i = 0; i < N; i++){
+                //Get the choice that was made fromt the sequence
+                string choice = max_seq.substr(i*2, 6);
+                //This Here will sum up the choices frequncy and the sequence where it shows up
+                next_choice_find[choice] += choiceFreq[choice.substr(0,5)];
+            }
+            string next_choice = "";
+            int freqMax = 0;
+            for (auto it = next_choice_find.begin(); it != next_choice_find.end(); ++it) {
+                string choice02 = it->first;
+                int x = it->second;
+                //Here we are locating where the frequcny is the highest from teh choices.
+                if (x> freqMax){
+                    next_choice = choice02;
+                    freqMax = x;
                 }
+            }
+            
+            //Here we make the ultimate pwer move.
+            if (next_choice == "rock"){
+                return "paper";
+            }
             else if(next_choice == "paper"){
                 return "scissors";
             }

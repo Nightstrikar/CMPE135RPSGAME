@@ -15,6 +15,7 @@ using namespace std;
 class SmartChooser : public Chooser {
 private:
     string choice;
+    int value_rad;
 public:
     string make_choice(string user_choice, int turn_number) override;
 };

@@ -50,10 +50,11 @@ int main(int argc, const char * argv[]) {
     Chooser *chooser = ChooserFactory::make_chooser(which);
     bool play = true;
     char playChoice;
+    int i = 0;
+    int x = 0;
     while (play) {
-        int i = 0;
         string userChoice = "";
-        while(i<20){
+        while(i<(x+20)){
             cout<<"Welcome to rock, paper, scissors for round #"<<i+1<<endl;
             cout<<"Please choose an option"<<endl;
             cin>>userChoice;
@@ -67,6 +68,7 @@ int main(int argc, const char * argv[]) {
         cin >> playChoice;
         if (playChoice == 'y' || playChoice == 'Y'){
             play = true;
+            x += i;
         }
         else{
             play = false;

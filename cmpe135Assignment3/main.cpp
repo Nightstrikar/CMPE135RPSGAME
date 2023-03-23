@@ -49,7 +49,7 @@ int main(int argc, const char * argv[]) {
     string which = "smart";
     Chooser *chooser = ChooserFactory::make_chooser(which);
     bool play = true;
-
+    char playChoice;
     while (play) {
         int i = 0;
         string userChoice = "";
@@ -63,9 +63,14 @@ int main(int argc, const char * argv[]) {
             whoWon(userChoice,compChoice);
             i++;
         }
-        //cout << "Do you want to play again? (y/n) ";
-        //cin >> play;
-        //play = (play == 'y' || play == 'Y');
+        cout << "Do you want to play again? (y/n) ";
+        cin >> playChoice;
+        if (playChoice == 'y' || playChoice == 'Y'){
+            play = true;
+        }
+        else{
+            play = false;
+        }
 
     }
 

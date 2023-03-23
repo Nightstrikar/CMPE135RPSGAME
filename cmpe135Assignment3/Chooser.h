@@ -14,7 +14,7 @@ using namespace std;
 
 class Chooser {
 public:
-    virtual string make_choice() = 0;
+    virtual string make_choice(string user_choice, int turn_number) = 0;
 };
 
 

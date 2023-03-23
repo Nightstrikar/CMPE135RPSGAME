@@ -44,10 +44,9 @@ void whoWon(string user, string comp){
     cout<<endl;
 };
 
-
 int main(int argc, const char * argv[]) {
     // insert code here...
-    string which = "random";
+    string which = "smart";
         Chooser *chooser = ChooserFactory::make_chooser(which);
 
         int i = 0;
@@ -56,7 +55,7 @@ int main(int argc, const char * argv[]) {
             cout<<"Welcome to rock, paper, scissors for round #"<<i+1<<endl;
             cout<<"Please choose an option"<<endl;
             cin>>userChoice;
-            string compChoice = chooser->make_choice();
+            string compChoice = chooser->make_choice(userChoice,i);
             cout<<"You chose: "<<userChoice<<endl;
             cout<<"The computer chose: "<<compChoice<<endl;
             whoWon(userChoice,compChoice);

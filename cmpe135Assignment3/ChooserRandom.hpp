@@ -20,7 +20,7 @@ private:
     int value;
     string choice;
 public:
-    string make_choice() override;
+    string make_choice(string user_choice, int turn_number) override;
 };
 
 

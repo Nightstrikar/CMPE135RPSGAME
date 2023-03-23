@@ -11,7 +11,7 @@
 //#include "RandomChooser.h"
 using namespace std;
 
-string RandomChooser::make_choice(){
+string RandomChooser::make_choice(string user_choice, int turn_number){
         value = rand() % 3;
         if (value == 0) {
                 choice = "rock";

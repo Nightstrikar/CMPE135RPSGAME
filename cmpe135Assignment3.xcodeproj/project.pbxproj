@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D32A9E3429C87752003F8E3D /* ChooserFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D32A9E3029C87752003F8E3D /* ChooserFactory.cpp */; };
 		D32A9E3529C87752003F8E3D /* ChooserRandom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D32A9E3129C87752003F8E3D /* ChooserRandom.cpp */; };
+		D32A9E3929C90B66003F8E3D /* ChooserSmart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D32A9E3729C90B66003F8E3D /* ChooserSmart.cpp */; };
 		D333967029C02CAC00582881 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D333966F29C02CAC00582881 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,8 @@
 		D32A9E3129C87752003F8E3D /* ChooserRandom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChooserRandom.cpp; sourceTree = "<group>"; };
 		D32A9E3229C87752003F8E3D /* Chooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chooser.h; sourceTree = "<group>"; };
 		D32A9E3329C87752003F8E3D /* ChooserRandom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChooserRandom.hpp; sourceTree = "<group>"; };
+		D32A9E3729C90B66003F8E3D /* ChooserSmart.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChooserSmart.cpp; sourceTree = "<group>"; };
+		D32A9E3829C90B66003F8E3D /* ChooserSmart.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ChooserSmart.hpp; sourceTree = "<group>"; };
 		D333966C29C02CAC00582881 /* cmpe135Assignment3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cmpe135Assignment3; sourceTree = BUILT_PRODUCTS_DIR; };
 		D333966F29C02CAC00582881 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,6 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				D32A9E3229C87752003F8E3D /* Chooser.h */,
+				D32A9E3829C90B66003F8E3D /* ChooserSmart.hpp */,
+				D32A9E3729C90B66003F8E3D /* ChooserSmart.cpp */,
 				D32A9E3029C87752003F8E3D /* ChooserFactory.cpp */,
 				D32A9E3129C87752003F8E3D /* ChooserRandom.cpp */,
 				D32A9E3329C87752003F8E3D /* ChooserRandom.hpp */,
@@ -134,6 +139,7 @@
 				D32A9E3529C87752003F8E3D /* ChooserRandom.cpp in Sources */,
 				D333967029C02CAC00582881 /* main.cpp in Sources */,
 				D32A9E3429C87752003F8E3D /* ChooserFactory.cpp in Sources */,
+				D32A9E3929C90B66003F8E3D /* ChooserSmart.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

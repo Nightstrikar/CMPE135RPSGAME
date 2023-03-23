@@ -14,6 +14,7 @@
 using namespace std;
 #include <ctime>
 #include "ChooserRandom.hpp"
+#include "ChooserSmart.hpp"
 class ChooserFactory {
 public:
     static Chooser* make_chooser(string which);

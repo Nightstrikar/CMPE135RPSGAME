@@ -1,0 +1,10 @@
+{
+  "name" : "cmpe135rpsgame",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "657bfe23f401f234d2bea75c36f79777ad944d21",
+  "dependencies" : [ {
+    "name" : "wxwidgets",
+    "version>=" : "3.2.2.1#2",
+    "$comment" : "    find_package(wxWidgets CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE wx::core wx::base)\n"
+  } ]
+}

@@ -16,28 +16,141 @@
 using namespace std;
 
 #include "ChooserFactory.hpp"
+/*
 class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
 };
+*/
 
-class MyFrame : public wxFrame
-{
+
+class MyFrame : public wxFrame {
+    public:
+        MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
+                : wxFrame(NULL, wxID_ANY, title, pos, size), chosenLabel(nullptr), computerChosenLabel(nullptr)
+        {
+
+
+            //while (play) {
+                //while (i < (x+20)) {
+                    wxPanel *panel = new wxPanel(this, wxID_ANY);
+                    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+
+                    roundLabel = new wxStaticText(panel, wxID_ANY, wxString::Format("Round %d", i));
+                    wxFont font = roundLabel->GetFont();
+                    font.MakeBold();
+                    roundLabel->SetFont(font);
+                    sizer->Add(roundLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
+
+                    wxButton *rockButton = new wxButton(panel, wxID_ANY, "Rock");
+                    buttonsSizer->Add(rockButton, 0, wxALL, 10);
+
+                    wxButton *paperButton = new wxButton(panel, wxID_ANY, "Paper");
+                    buttonsSizer->Add(paperButton, 0, wxALL, 10);
+
+                    wxButton *scissorsButton = new wxButton(panel, wxID_ANY, "Scissors");
+                    buttonsSizer->Add(scissorsButton, 0, wxALL, 10);
+
+                    sizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 10);
+
+                    chosenLabel = new wxStaticText(panel, wxID_ANY, "Human Chooses: ");
+                    sizer->Add(chosenLabel, 0, wxALL, 10);
+
+                    wxStaticText *computerLabel = new wxStaticText(panel, wxID_ANY, "Computer ");
+                    wxFont font2 = computerLabel->GetFont();
+                    font2.MakeBold();
+                    computerLabel->SetFont(font2);
+                    sizer->Add(computerLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxStaticText *humanLabel = new wxStaticText(panel, wxID_ANY, "Predicted Human Choice: ");
+                    sizer->Add(humanLabel, 0, wxALL, 10);
+
+                    computerChosenLabel = new wxStaticText(panel, wxID_ANY, "Therefore computer chooses: ");
+                    sizer->Add(computerChosenLabel, 0, wxALL, 10);
+
+                    wxStaticText *winnerLabel = new wxStaticText(panel, wxID_ANY, "The Winner: ");
+                    wxFont font3 = winnerLabel->GetFont();
+                    font3.MakeBold();
+                    winnerLabel->SetFont(font3);
+                    sizer->Add(winnerLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxStaticText *statlabel = new wxStaticText(panel, wxID_ANY, "Statistics ");
+                    wxFont font4 = statlabel->GetFont();
+                    font4.MakeBold();
+                    statlabel->SetFont(font4);
+                    sizer->Add(statlabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxStaticText *humanWinLabel = new wxStaticText(panel, wxID_ANY, "Human wins: ");
+                    sizer->Add(humanWinLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxStaticText *computerWinLabel = new wxStaticText(panel, wxID_ANY, "Computer wins: ");
+                    sizer->Add(computerWinLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    wxStaticText *tieLabel = new wxStaticText(panel, wxID_ANY, "Ties: ");
+                    sizer->Add(tieLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
+
+                    panel->SetSizer(sizer);
+
+                    rockButton->Bind(wxEVT_BUTTON, &MyFrame::OnRockButtonClicked, this);
+                    paperButton->Bind(wxEVT_BUTTON, &MyFrame::OnPaperButtonClicked, this);
+                    scissorsButton->Bind(wxEVT_BUTTON, &MyFrame::OnScissorsButtonClicked, this);
+                //}
+            //}
+        }
+
+    private:
+        wxStaticText* chosenLabel;
+        wxStaticText* computerChosenLabel;
+        wxStaticText* roundLabel;
+        string which  = "smart";
+        Chooser *chooser = ChooserFactory::make_chooser(which);
+        bool play = true;
+        char playChoice;
+        int i = 0;
+        int x = 0;
+
+        void OnRockButtonClicked(wxCommandEvent& event) {
+            i++;
+            roundLabel->SetLabel(wxString::Format("Round %d", i));
+            chosenLabel->SetLabelText("Human chooses: Rock");
+            computerChosenLabel->SetLabelText("Therefore computer chooses: Rock");
+        }
+
+        void OnPaperButtonClicked(wxCommandEvent& event) {
+            i++;
+            roundLabel->SetLabel(wxString::Format("Round %d", i));
+            chosenLabel->SetLabelText("Human chooses: Paper");
+            computerChosenLabel->SetLabelText("Therefore computer chooses: Paper");
+        }
+
+        void OnScissorsButtonClicked(wxCommandEvent& event) {
+            i++;
+            roundLabel->SetLabel(wxString::Format("Round %d", i));
+            chosenLabel->SetLabelText("Human chooses: Scissors");
+            computerChosenLabel->SetLabelText("Therefore computer chooses: Scissors");
+        }
+    };
+
+class MyApp : public wxApp {
 public:
-    MyFrame();
-    void OnButtonClicked(wxCommandEvent& event);
+    virtual bool OnInit()
+    {
+        MyFrame* frame = new MyFrame("Rock Paper Scissors", wxPoint(50, 50), wxSize(400, 600));
+        frame->Show(true);
 
-private:
-    void OnHello(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
+        return true;
+    }
 };
 
 enum
 {
     ID_Hello = 1
 };
+
+
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -75,105 +188,42 @@ void whoWon(string user, string comp){
     cout<<endl;
 };
 
+
+
+/*
     bool MyApp::OnInit() {
         MyFrame *frame = new MyFrame();
         frame->Show(true);
-        string which = "smart";
-        Chooser *chooser = ChooserFactory::make_chooser(which);
-        bool play = true;
-        char playChoice;
-        int i = 0;
-        int x = 0;
-        while (play) {
-            string userChoice = "";
-            while (i < (x + 20)) {
-                cout << "Welcome to rock, paper, scissors for round #" << i + 1 << endl;
-                cout << "Please choose an option" << endl;
-                cin >> userChoice;
-                string compChoice = chooser->make_choice(userChoice, i);
-                cout << "You chose: " << userChoice << endl;
-                cout << "The computer chose: " << compChoice << endl;
-                whoWon(userChoice, compChoice);
-                i++;
+        //std::thread console_thread([]() {
+            string which = "smart";
+            Chooser *chooser = ChooserFactory::make_chooser(which);
+            bool play = true;
+            char playChoice;
+            int i = 0;
+            int x = 0;
+            while (play) {
+                string userChoice = "";
+                while (i < (x + 20)) {
+                    cout << "Welcome to rock, paper, scissors for round #" << i + 1 << endl;
+                    cout << "Please choose an option" << endl;
+                    cin >> userChoice;
+                    string compChoice = chooser->make_choice(userChoice, i);
+                    cout << "You chose: " << userChoice << endl;
+                    cout << "The computer chose: " << compChoice << endl;
+                    whoWon(userChoice, compChoice);
+                    i++;
+                }
+                cout << "Do you want to play again? (y/n) ";
+                cin >> playChoice;
+                if (playChoice == 'y' || playChoice == 'Y') {
+                    play = true;
+                    x += i;
+                } else {
+                    play = false;
+                }
             }
-            cout << "Do you want to play again? (y/n) ";
-            cin >> playChoice;
-            if (playChoice == 'y' || playChoice == 'Y') {
-                play = true;
-                x += i;
-            } else {
-                play = false;
-            }
-        }
-    }
+        //});//console thread
+        return true;
 
-    MyFrame::MyFrame()
-    : wxFrame(nullptr, wxID_ANY, "Hello World")
-    {
-        wxButton* Button = new wxButton(this, wxID_ANY, "Click ME!");
-        // Create a horizontal box sizer
-        wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
-
-        // Add the button to the sizer
-        hbox->Add(Button, wxSizerFlags().Centre());
-
-        // Create a vertical box sizer
-        wxBoxSizer* vbox = new wxBoxSizer(wxVERTICAL);
-
-        // Add the horizontal sizer to the vertical sizer
-        vbox->Add(hbox, wxSizerFlags().Centre());
-
-        // Set the sizer for the frame
-        SetSizer(vbox);
-
-        // Set the status bar text
-        CreateStatusBar();
-        SetStatusText("Welcome to wxWidgets!");
-
-
-
-        wxMenu *menuFile = new wxMenu;
-        menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
-                         "Help string shown in status bar for this menu item");
-        menuFile->AppendSeparator();
-        menuFile->Append(wxID_EXIT);
-
-        wxMenu *menuHelp = new wxMenu;
-        menuHelp->Append(wxID_ABOUT);
-
-        wxMenuBar *menuBar = new wxMenuBar;
-        menuBar->Append(menuFile, "&File");
-        menuBar->Append(menuHelp, "&Help");
-
-        SetMenuBar( menuBar );
-
-        CreateStatusBar();
-        SetStatusText("Welcome to wxWidgets!");
-
-        Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
-        Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-        Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
-        // Bind the button click event to a handler function
-        Bind(wxEVT_BUTTON, &MyFrame::OnButtonClicked, this, Button->GetId());
-    }
-
-    void MyFrame::OnExit(wxCommandEvent& event)
-    {
-        Close(true);
-    }
-
-    void MyFrame::OnAbout(wxCommandEvent& event)
-    {
-        wxMessageBox("This is a wxWidgets Hello World example",
-                     "About Hello World", wxOK | wxICON_INFORMATION);
-    }
-
-    void MyFrame::OnHello(wxCommandEvent& event)
-    {
-        wxLogMessage("Hello world from wxWidgets!");
-    }
-    void MyFrame::OnButtonClicked(wxCommandEvent& event)
-    {
-        wxLogMessage("Button clicked!");
-    }
-
+    };
+*/

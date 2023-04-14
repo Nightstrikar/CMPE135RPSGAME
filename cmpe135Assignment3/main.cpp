@@ -122,35 +122,35 @@ private:
     string winnerStd = "";
 
     string whoWon(string user, string comp) {
-
+        string win = "";
         if (user == comp) {
-             return "Tie";
+             win = "Tie";
         }
         else if (user == "rock") {
             if (comp == "paper") {
-                return "Computer";
+                win = "Computer";
             }
             else {
-                return  "Human";
+                win = "Human";
             }
         }
         else if (user == "paper") {
             if (comp == "scissors") {
-                return  "Computer";
+                win = "Computer";
             }
             else {
-                return "Human";
+                win = "Human";
             }
         }
         else if (user == "scissors") {
             if (comp == "rock") {
-                return "Computer";
+                win = "Computer";
             }
             else {
-                return "Human";
+                win = "Human";
             }
         }
-        return "";
+        return win;
     }
 
     
@@ -163,8 +163,9 @@ private:
         compChoiceStd = chooser->make_choice(userChoice, i);
         wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
-        /*winner = whoWon(userChoice, compChoice);
-        winnerLabel->SetLabelText("The Winner: " + winner);*/
+        winnerStd = whoWon(userChoice, compChoiceStd);
+        wxString winner(winnerStd.c_str());
+        winnerLabel->SetLabelText("The Winner: " + winner);
     }
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
@@ -175,6 +176,9 @@ private:
         compChoiceStd = chooser->make_choice(userChoice, i);
         wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
+        winnerStd = whoWon(userChoice, compChoiceStd);
+        wxString winner(winnerStd.c_str());
+        winnerLabel->SetLabelText("The Winner: " + winner);
     }
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
@@ -185,6 +189,9 @@ private:
         compChoiceStd = chooser->make_choice(userChoice, i);
         wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
+        winnerStd = whoWon(userChoice, compChoiceStd);
+        wxString winner(winnerStd.c_str());
+        winnerLabel->SetLabelText("The Winner: " + winner);
     }
 };
 

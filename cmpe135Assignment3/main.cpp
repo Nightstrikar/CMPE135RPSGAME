@@ -16,6 +16,7 @@
 #include <string>
 using namespace std;
 
+
 #include "ChooserFactory.hpp"
 /*
 class MyApp : public wxApp
@@ -149,6 +150,7 @@ private:
                 return "Human";
             }
         }
+        return "";
     }
 
     
@@ -157,33 +159,26 @@ private:
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Rock");
-        userChoice = "Rock";
+        computerChosenLabel->SetLabelText("Therefore computer chooses: rock");
+        /*userChoice = "Rock";
         compChoice = chooser->make_choice(userChoice, i);
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
         winner = whoWon(userChoice, compChoice);
-        winnerLabel->SetLabelText("The Winner: " + winner);
+        winnerLabel->SetLabelText("The Winner: " + winner);*/
     }
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Paper");
-        userChoice = "Paper";
-        compChoice = chooser->make_choice(userChoice, i);
-        computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
-        winner = whoWon(userChoice, compChoice);
-        winnerLabel->SetLabelText("The Winner: " + winner);
+        computerChosenLabel->SetLabelText("Therefore computer chooses: paper");
     }
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Scissors");
-        userChoice = "Scissors";
-        compChoice = chooser->make_choice(userChoice, i);
-        computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
-        winner = whoWon(userChoice, compChoice);
-        winnerLabel->SetLabelText("The Winner: " + winner);
+        computerChosenLabel->SetLabelText("Therefore computer chooses: scissors");
     }
 };
 

@@ -117,7 +117,7 @@ private:
     char playChoice;
     int i = 0;
     int x = 0;
-    int hWin = 1;
+    int hWin = 0;
     int cWin = 0;
     int tie = 0;
     string userChoice = "";

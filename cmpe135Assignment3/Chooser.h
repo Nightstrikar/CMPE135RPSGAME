@@ -14,6 +14,7 @@ using namespace std;
 
 class Chooser {
 public:
+    string prediction = "none";
     virtual string make_choice(string user_choice, int turn_number) = 0;
 };
 

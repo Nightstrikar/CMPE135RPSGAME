@@ -116,6 +116,7 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
                 next_choice_find[choice] += choiceFreq[choice.substr(0,5)];
             }
             string next_choice = "";
+            //prediction = next_choice;
             int freqMax = 0;
             for (auto it = next_choice_find.begin(); it != next_choice_find.end(); ++it) {
                 string choice02 = it->first;
@@ -123,18 +124,22 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
                 //Here we are locating where the frequcny is the highest from teh choices.
                 if (x> freqMax){
                     next_choice = choice02;
+                    //prediction = next_choice;
                     freqMax = x;
                 }
             }
             
             //Here we make the ultimate pwer move.
             if (next_choice == "rock"){
+                prediction = next_choice;
                 return "paper";
             }
             else if(next_choice == "paper"){
+                prediction = next_choice;
                 return "scissors";
             }
             else{
+                prediction = next_choice;
                 return "rock";
             }
         }

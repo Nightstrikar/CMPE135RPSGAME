@@ -169,6 +169,7 @@ private:
 
     void OnRockButtonClicked(wxCommandEvent& event) {
         i++;
+        x++;
         if(i>20){
             i = 1;
             hWin = 0;
@@ -179,9 +180,9 @@ private:
         chosenLabel->SetLabelText("Human chooses: Rock");
         userChoice = "rock";
         compChoiceStd = chooser->make_choice(userChoice, i);
-        //compUserChoice = chooser->next_choice;
+        //compUserChoice = chooser->prediction;
         wxString compChoice(compChoiceStd.c_str());
-        humanLabel->SetLabelText("Predicted Human Choice: " + compChoice);
+        humanLabel->SetLabelText("Predicted Human Choice: " + chooser->prediction);
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
         winnerStd = whoWon(userChoice, compChoiceStd);
         wxString winner(winnerStd.c_str());
@@ -194,6 +195,7 @@ private:
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
         i++;
+        x++;
         if(i>20){
             i = 1;
             hWin = 0;
@@ -217,6 +219,7 @@ private:
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
         i++;
+        x++;
         if(i>20){
             i = 1;
             hWin = 0;
@@ -254,47 +257,4 @@ enum
 {
     ID_Hello = 1
 };
-
-
-
 wxIMPLEMENT_APP(MyApp);
-
-
-
-
-/*
-    bool MyApp::OnInit() {
-        MyFrame *frame = new MyFrame();
-        frame->Show(true);
-        //std::thread console_thread([]() {
-            string which = "smart";
-            Chooser *chooser = ChooserFactory::make_chooser(which);
-            bool play = true;
-            char playChoice;
-            int i = 0;
-            int x = 0;
-            while (play) {
-                string userChoice = "";
-                while (i < (x + 20)) {
-                    cout << "Welcome to rock, paper, scissors for round #" << i + 1 << endl;
-                    cout << "Please choose an option" << endl;
-                    cin >> userChoice;
-                    string compChoice = chooser->make_choice(userChoice, i);
-                    cout << "You chose: " << userChoice << endl;
-                    cout << "The computer chose: " << compChoice << endl;
-                    whoWon(userChoice, compChoice);
-                    i++;
-                }
-                cout << "Do you want to play again? (y/n) ";
-                cin >> playChoice;
-                if (playChoice == 'y' || playChoice == 'Y') {
-                    play = true;
-                    x += i;
-                } else {
-                    play = false;
-                }
-            }
-        //});//console thread
-        return true;
-    };
-*/

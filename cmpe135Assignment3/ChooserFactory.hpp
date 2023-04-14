@@ -18,6 +18,7 @@ using namespace std;
 class ChooserFactory {
 public:
     static Chooser* make_chooser(string which);
+
 };
 
 class HumanChooser : public Chooser {

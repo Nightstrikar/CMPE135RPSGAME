@@ -13,7 +13,7 @@ using namespace std;
 string SmartChooser::make_choice(string user_choice, int turn_number){
     const int N=5; //Here we say the number moves to remember for each sequence
     static vector<string> choices(N); //We are using this to store the amount of choices previously made
-    static unordered_map<string, int> freq; //This is going to to be used for the frequencies of each sequence
+    static unordered_map<string, int> freq; //This is going to be used for the frequencies of each sequence
     //vector<string> seq;
     static unordered_map<string, int> choiceFreq;
     

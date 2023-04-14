@@ -85,13 +85,13 @@ public:
         statlabel->SetFont(font4);
         sizer->Add(statlabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
 
-        wxStaticText* humanWinLabel = new wxStaticText(panel, wxID_ANY, "Human wins: ");
+        humanWinLabel = new wxStaticText(panel, wxID_ANY, wxString::Format("Human wins: %d", hWin));
         sizer->Add(humanWinLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
 
-        wxStaticText* computerWinLabel = new wxStaticText(panel, wxID_ANY, "Computer wins: ");
+        computerWinLabel = new wxStaticText(panel, wxID_ANY, wxString::Format("Computer wins: %d", cWin));
         sizer->Add(computerWinLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
 
-        wxStaticText* tieLabel = new wxStaticText(panel, wxID_ANY, "Ties: ");
+        tieLabel = new wxStaticText(panel, wxID_ANY, wxString::Format("Ties: %d", tie));
         sizer->Add(tieLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
 
         panel->SetSizer(sizer);
@@ -108,13 +108,16 @@ private:
     wxStaticText* computerChosenLabel;
     wxStaticText* roundLabel;
     wxStaticText* winnerLabel;
+    wxStaticText* humanWinLabel;
+    wxStaticText* computerWinLabel;
+    wxStaticText* tieLabel;
     string which = "smart";
     Chooser* chooser = ChooserFactory::make_chooser(which);
     bool play = true;
     char playChoice;
     int i = 0;
     int x = 0;
-    int hWin = 0;
+    int hWin = 1;
     int cWin = 0;
     int tie = 0;
     string userChoice = "";
@@ -125,29 +128,36 @@ private:
         string win = "";
         if (user == comp) {
              win = "Tie";
+             tie++;
         }
         else if (user == "rock") {
             if (comp == "paper") {
                 win = "Computer";
+                cWin++;
             }
             else {
                 win = "Human";
+                hWin++;
             }
         }
         else if (user == "paper") {
             if (comp == "scissors") {
                 win = "Computer";
+                cWin++;
             }
             else {
                 win = "Human";
+                hWin++;
             }
         }
         else if (user == "scissors") {
             if (comp == "rock") {
                 win = "Computer";
+                cWin++;
             }
             else {
                 win = "Human";
+                hWin++;
             }
         }
         return win;
@@ -166,6 +176,10 @@ private:
         winnerStd = whoWon(userChoice, compChoiceStd);
         wxString winner(winnerStd.c_str());
         winnerLabel->SetLabelText("The Winner: " + winner);
+        humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
+        computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+
     }
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
@@ -179,6 +193,10 @@ private:
         winnerStd = whoWon(userChoice, compChoiceStd);
         wxString winner(winnerStd.c_str());
         winnerLabel->SetLabelText("The Winner: " + winner);
+        humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
+        computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+
     }
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
@@ -192,6 +210,10 @@ private:
         winnerStd = whoWon(userChoice, compChoiceStd);
         wxString winner(winnerStd.c_str());
         winnerLabel->SetLabelText("The Winner: " + winner);
+        humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
+        computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+
     }
 };
 

@@ -67,7 +67,7 @@ public:
         computerLabel->SetFont(font2);
         sizer->Add(computerLabel, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 10);
 
-        wxStaticText* humanLabel = new wxStaticText(panel, wxID_ANY, "Predicted Human Choice: ");
+        humanLabel = new wxStaticText(panel, wxID_ANY, "Predicted Human Choice: ");
         sizer->Add(humanLabel, 0, wxALL, 10);
 
         computerChosenLabel = new wxStaticText(panel, wxID_ANY, "Therefore computer chooses: ");
@@ -111,6 +111,7 @@ private:
     wxStaticText* humanWinLabel;
     wxStaticText* computerWinLabel;
     wxStaticText* tieLabel;
+    wxStaticText* humanLabel;
     string which = "smart";
     Chooser* chooser = ChooserFactory::make_chooser(which);
     bool play = true;
@@ -121,6 +122,7 @@ private:
     int cWin = 0;
     int tie = 0;
     string userChoice = "";
+    string compUserChoice = "";
     string compChoiceStd = "";
     string winnerStd = "";
 
@@ -167,11 +169,19 @@ private:
 
     void OnRockButtonClicked(wxCommandEvent& event) {
         i++;
+        if(i>20){
+            i = 1;
+            hWin = 0;
+            cWin = 0;
+            tie = 0;
+        }
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Rock");
         userChoice = "rock";
         compChoiceStd = chooser->make_choice(userChoice, i);
+        //compUserChoice = chooser->next_choice;
         wxString compChoice(compChoiceStd.c_str());
+        humanLabel->SetLabelText("Predicted Human Choice: " + compChoice);
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
         winnerStd = whoWon(userChoice, compChoiceStd);
         wxString winner(winnerStd.c_str());
@@ -184,6 +194,12 @@ private:
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
         i++;
+        if(i>20){
+            i = 1;
+            hWin = 0;
+            cWin = 0;
+            tie = 0;
+        }
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Paper");
         userChoice = "paper";
@@ -201,6 +217,12 @@ private:
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
         i++;
+        if(i>20){
+            i = 1;
+            hWin = 0;
+            cWin = 0;
+            tie = 0;
+        }
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Scissors");
         userChoice = "scissors";

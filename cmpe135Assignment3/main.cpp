@@ -118,8 +118,8 @@ private:
     int cWin = 0;
     int tie = 0;
     string userChoice = "";
-    string compChoice = "";
-    string winner = "";
+    string compChoiceStd = "";
+    string winnerStd = "";
 
     string whoWon(string user, string comp) {
 
@@ -159,11 +159,11 @@ private:
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Rock");
-        computerChosenLabel->SetLabelText("Therefore computer chooses: rock");
-        /*userChoice = "Rock";
-        compChoice = chooser->make_choice(userChoice, i);
+        userChoice = "rock";
+        compChoiceStd = chooser->make_choice(userChoice, i);
+        wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
-        winner = whoWon(userChoice, compChoice);
+        /*winner = whoWon(userChoice, compChoice);
         winnerLabel->SetLabelText("The Winner: " + winner);*/
     }
 
@@ -171,14 +171,20 @@ private:
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Paper");
-        computerChosenLabel->SetLabelText("Therefore computer chooses: paper");
+        userChoice = "paper";
+        compChoiceStd = chooser->make_choice(userChoice, i);
+        wxString compChoice(compChoiceStd.c_str());
+        computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
     }
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
         i++;
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Scissors");
-        computerChosenLabel->SetLabelText("Therefore computer chooses: scissors");
+        userChoice = "scissors";
+        compChoiceStd = chooser->make_choice(userChoice, i);
+        wxString compChoice(compChoiceStd.c_str());
+        computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
     }
 };
 

@@ -18,20 +18,32 @@ using namespace std;
 
 
 #include "ChooserFactory.hpp"
-/*
-class MyApp : public wxApp
+enum
 {
-public:
-    virtual bool OnInit();
+    ID_About = 1,
+    ID_Start,
+    ID_Quit,
 };
-*/
-
 
 class MyFrame : public wxFrame {
 public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         : wxFrame(NULL, wxID_ANY, title, pos, size), chosenLabel(nullptr), computerChosenLabel(nullptr), winnerLabel(nullptr)
     {
+        Connect(ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout));
+        Connect(ID_Quit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnExit));
+        wxMenu *menuFile = new wxMenu;
+        menuFile->Append(ID_About, "&About\t", "Help string shown in status bar for this menu item");
+        menuFile->Append(ID_Start, "&Start New Game", "Start a New Game");
+        menuFile->AppendSeparator();
+        menuFile->Append(ID_Quit, "&Exit\tCtrl-Q", "Quit this program");
+
+
+        // create menu bar and attach menu to it
+        wxMenuBar *menuBar = new wxMenuBar();
+        menuBar->Append(menuFile, "&Menu");
+        SetMenuBar(menuBar);
+
 
 
         //while (play) {
@@ -165,7 +177,22 @@ private:
         return win;
     }
 
-    
+    void OnExit(wxCommandEvent& event)
+    {
+        Close(true);
+    }
+
+    void OnAbout(wxCommandEvent& event)
+    {
+        wxMessageBox("This is a program that will display a rock paper "
+                     "scissors game and the use of wxwidgets. We were tasked to "
+                     "incorperate our game with the GUI program in order to show "
+                     "our knowledge and understanding of how to incorperate a "
+                     "command line program into a functional GUI that uses "
+                     "buttons as the choices the user would make.",
+                     "About our Program", wxOK | wxICON_INFORMATION);
+    }
+
 
     void OnRockButtonClicked(wxCommandEvent& event) {
         i++;
@@ -179,7 +206,7 @@ private:
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Rock");
         userChoice = "rock";
-        compChoiceStd = chooser->make_choice(userChoice, i);
+        compChoiceStd = chooser->make_choice(userChoice, x);
         //compUserChoice = chooser->prediction;
         wxString compChoice(compChoiceStd.c_str());
         humanLabel->SetLabelText("Predicted Human Choice: " + chooser->prediction);
@@ -189,7 +216,7 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
 
     }
 
@@ -205,7 +232,7 @@ private:
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Paper");
         userChoice = "paper";
-        compChoiceStd = chooser->make_choice(userChoice, i);
+        compChoiceStd = chooser->make_choice(userChoice, x);
         wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
         winnerStd = whoWon(userChoice, compChoiceStd);
@@ -213,7 +240,7 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
 
     }
 
@@ -229,7 +256,7 @@ private:
         roundLabel->SetLabel(wxString::Format("Round %d", i));
         chosenLabel->SetLabelText("Human chooses: Scissors");
         userChoice = "scissors";
-        compChoiceStd = chooser->make_choice(userChoice, i);
+        compChoiceStd = chooser->make_choice(userChoice, x);
         wxString compChoice(compChoiceStd.c_str());
         computerChosenLabel->SetLabelText("Therefore computer chooses: " + compChoice);
         winnerStd = whoWon(userChoice, compChoiceStd);
@@ -237,10 +264,11 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
 
     }
 };
+
 
 class MyApp : public wxApp {
 public:
@@ -253,8 +281,29 @@ public:
     }
 };
 
-enum
+/*class MyMenuBar : public wxMenuBar
 {
-    ID_Hello = 1
+public:
+    MyMenuBar()
+    {
+        // Create the File menu
+        wxMenu* fileMenu = new wxMenu;
+
+        // Add the Open item to the File menu
+        wxMenuItem* openItem = new wxMenuItem(fileMenu, wxID_OPEN);
+        fileMenu->Append(openItem);
+
+        // Add a separator to the File menu
+        fileMenu->AppendSeparator();
+
+        // Add the Exit item to the File menu
+        wxMenuItem* exitItem = new wxMenuItem(fileMenu, wxID_EXIT);
+        fileMenu->Append(exitItem);
+
+        // Add the File menu to the menu bar
+        Append(fileMenu, "&File");
+    }
 };
+ */
+
 wxIMPLEMENT_APP(MyApp);

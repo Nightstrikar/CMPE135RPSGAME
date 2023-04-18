@@ -124,23 +124,31 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
                 //Here we are locating where the frequcny is the highest from teh choices.
                 if (x> freqMax){
                     next_choice = choice02;
+                    next_choice.erase(next_choice.find(','), 1);
+                    cout << "choice02 " << next_choice << endl;
                     //prediction = next_choice;
                     freqMax = x;
                 }
             }
             
             //Here we make the ultimate pwer move.
-            if (next_choice == "rock"){
+            if (next_choice == "scissors"){
                 prediction = next_choice;
-                return "paper";
+                cout << "piedra" << endl;
+                cout << prediction << endl;
+                return "rock";
             }
             else if(next_choice == "paper"){
                 prediction = next_choice;
+                cout << "papel" << endl;
+                cout << prediction << endl;
                 return "scissors";
             }
             else{
                 prediction = next_choice;
-                return "rock";
+                cout << "tijeras" << endl;
+                cout << prediction << endl;
+                return "paper";
             }
         }
         

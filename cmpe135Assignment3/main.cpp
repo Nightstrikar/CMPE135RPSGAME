@@ -32,6 +32,7 @@ public:
     {
         Connect(ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout));
         Connect(ID_Quit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnExit));
+        Connect(ID_Start, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnStartNewGame));
         wxMenu *menuFile = new wxMenu;
         menuFile->Append(ID_About, "&About\t", "Help string shown in status bar for this menu item");
         menuFile->Append(ID_Start, "&Start New Game", "Start a New Game");
@@ -182,6 +183,27 @@ private:
         Close(true);
     }
 
+    void OnStartNewGame(wxCommandEvent& event){
+        i = 0;
+        hWin = 0;
+        cWin = 0;
+        tie = 0;
+        roundLabel->SetLabel(wxString::Format("Round %d", i));
+        chosenLabel->SetLabelText("Human chooses: ");
+        //userChoice = "rock";
+        compChoiceStd = chooser->make_choice(userChoice, x);
+        //compUserChoice = chooser->prediction;
+        //wxString compChoice(compChoiceStd.c_str());
+        humanLabel->SetLabelText("Predicted Human Choice: ");
+        computerChosenLabel->SetLabelText("Therefore computer chooses: ");
+        //winnerStd = whoWon(userChoice, compChoiceStd);
+        //wxString winner(winnerStd.c_str());
+        winnerLabel->SetLabelText("The Winner: ");
+        humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
+        computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
+    }
+
     void OnAbout(wxCommandEvent& event)
     {
         wxMessageBox("This is a program that will display a rock paper "
@@ -280,30 +302,5 @@ public:
         return true;
     }
 };
-
-/*class MyMenuBar : public wxMenuBar
-{
-public:
-    MyMenuBar()
-    {
-        // Create the File menu
-        wxMenu* fileMenu = new wxMenu;
-
-        // Add the Open item to the File menu
-        wxMenuItem* openItem = new wxMenuItem(fileMenu, wxID_OPEN);
-        fileMenu->Append(openItem);
-
-        // Add a separator to the File menu
-        fileMenu->AppendSeparator();
-
-        // Add the Exit item to the File menu
-        wxMenuItem* exitItem = new wxMenuItem(fileMenu, wxID_EXIT);
-        fileMenu->Append(exitItem);
-
-        // Add the File menu to the menu bar
-        Append(fileMenu, "&File");
-    }
-};
- */
 
 wxIMPLEMENT_APP(MyApp);

@@ -23,6 +23,7 @@ enum
     ID_About = 1,
     ID_Start,
     ID_Quit,
+    ID_Round,
 };
 
 class MyFrame : public wxFrame {
@@ -33,9 +34,11 @@ public:
         Connect(ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout));
         Connect(ID_Quit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnExit));
         Connect(ID_Start, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnStartNewGame));
+        Connect(ID_Round, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::SetNewRound));
         wxMenu *menuFile = new wxMenu;
         menuFile->Append(ID_About, "&About\t", "Help string shown in status bar for this menu item");
         menuFile->Append(ID_Start, "&Start New Game", "Start a New Game");
+        menuFile->Append(ID_Round, "&Set Round Limit", "Create the round limiter");
         menuFile->AppendSeparator();
         menuFile->Append(ID_Quit, "&Exit\tCtrl-Q", "Quit this program");
 
@@ -134,6 +137,7 @@ private:
     int hWin = 0;
     int cWin = 0;
     int tie = 0;
+    long rounds = 20;
     string userChoice = "";
     string compUserChoice = "";
     string compChoiceStd = "";
@@ -204,6 +208,28 @@ private:
         tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
     }
 
+    void SetNewRound(wxCommandEvent& event) {
+
+        wxString prompt = "Please set how many rounds you are going to want for the game to stop at each game.";
+        wxString caption = "Setting the Round Limit";
+        wxString default_value = "0";
+
+        // Display a dialog to get user input
+        wxTextEntryDialog dialog(this, prompt, caption, default_value, wxTextEntryDialogStyle, wxDefaultPosition);
+        if (dialog.ShowModal() == wxID_OK) {
+            rounds = wxAtoi(dialog.GetValue());
+        }
+
+        // Do something with the user input
+        wxString message;
+        if (rounds > 0) {
+            message.Printf("You set the round limit to %ld.", rounds);
+
+        } else {
+            message = "Invalid round limit. Please enter a positive integer.";
+        }
+        wxMessageBox(message, "Round Limit", wxOK | wxICON_INFORMATION);
+    }
     void OnAbout(wxCommandEvent& event)
     {
         wxMessageBox("This is a program that will display a rock paper "
@@ -219,7 +245,7 @@ private:
     void OnRockButtonClicked(wxCommandEvent& event) {
         i++;
         x++;
-        if(i>20){
+        if(i>rounds){
             i = 1;
             hWin = 0;
             cWin = 0;
@@ -238,14 +264,14 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
 
     }
 
     void OnPaperButtonClicked(wxCommandEvent& event) {
         i++;
         x++;
-        if(i>20){
+        if(i>rounds){
             i = 1;
             hWin = 0;
             cWin = 0;
@@ -262,14 +288,14 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
 
     }
 
     void OnScissorsButtonClicked(wxCommandEvent& event) {
         i++;
         x++;
-        if(i>20){
+        if(i>rounds){
             i = 1;
             hWin = 0;
             cWin = 0;
@@ -286,7 +312,7 @@ private:
         winnerLabel->SetLabelText("The Winner: " + winner);
         humanWinLabel->SetLabel(wxString::Format("Human wins: %d", hWin));
         computerWinLabel->SetLabel(wxString::Format("Computer wins: %d", cWin));
-        tieLabel->SetLabel(wxString::Format("Ties: %d", x));
+        tieLabel->SetLabel(wxString::Format("Ties: %d", tie));
 
     }
 };

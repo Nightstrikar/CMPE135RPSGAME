@@ -24,10 +24,13 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
         cout << "Not enough choices" << endl;
         value_rad = rand() % 3;
         if (value_rad == 0) {
+            prediction = "scissors";
                 choice = "rock";
         } else if (value_rad == 1) {
+            prediction = "paper";
                 choice = "scissors";
         } else {
+            prediction = "rock";
                 choice = "paper";
         }
         return choice;
@@ -91,10 +94,13 @@ string SmartChooser::make_choice(string user_choice, int turn_number){
             cout << "Got here" << endl;
             value_rad = rand() % 3;
             if (value_rad == 0) {
+                    prediction = "scissors";
                     choice = "rock";
             } else if (value_rad == 1) {
+                    prediction = 'paper';
                     choice = "scissors";
             } else {
+                    prediction = 'rock';
                     choice = "paper";
             }
             return choice;

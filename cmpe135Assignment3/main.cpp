@@ -7,6 +7,113 @@
 // wxWidgets "Hello World" Program
 
 // For compilers that support precompilation, includes "wx/wx.h".
+///////////NEW CODE/////////////////////////////
+
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    fstream file("/Users/alberto/CLionProjects/CMPE135RPSGAME/cmpe135Assignment3/users.txt", ios::in | ios::app);
+    if (!file.is_open()) {
+        cerr << "Error: could not open users file." << endl;
+        return 1;
+    }
+
+    string username, password;
+    bool isAuthenticated = false;
+    string newUser;
+    bool newUserBool = false;
+    string fileUsername, filePassword, employeeType;
+
+    cout << "Are you a new user? ";
+    cin >> newUser;
+
+    transform(newUser.begin(), newUser.end(), newUser.begin(), ::tolower);
+
+    if (newUser == "yes" || newUser == "y") {
+        newUserBool = true;
+    }
+
+    // creating new user
+    if (newUserBool) {
+        string newUsername, newPassword, newEmployeeType;
+        bool usernameExists = false;
+
+        // Check if username already exists
+        do{
+            usernameExists = false;
+            cout << "Please enter your desired username: ";
+            cin >> newUsername;
+            ifstream checkFile("users.txt");
+            string line;
+            while (getline(checkFile, line)) {
+                istringstream iss(line);
+                string fileUsername, filePassword, fileEmployeeType;
+                if (iss >> fileUsername >> filePassword >> fileEmployeeType) {
+                    if (newUsername == fileUsername) {
+                        usernameExists = true;
+                        cout << "Username already exists. Please choose a different username." << endl;
+                    }
+                }
+            }
+        }while(usernameExists == true);
+
+        cout << "Please enter your desired password: ";
+        cin >> newPassword;
+
+        newEmployeeType = "worker";
+
+        // Append new user to file
+        file << newUsername << " " << newPassword << " " << newEmployeeType << endl;
+
+        cout << "Account created successfully!" << endl;
+        //}
+    }
+
+    cout << "Please enter your username: ";
+    cin >> username;
+
+    cout << "Please enter your password: ";
+    cin >> password;
+
+
+
+    // logging in
+    string line;
+    file.seekg(0, ios::beg);
+    while (getline(file, line) && !isAuthenticated) {
+        istringstream iss(line);
+        if (iss >> fileUsername >> filePassword >> employeeType) {
+            if (username == fileUsername && password == filePassword) {
+                isAuthenticated = true;
+            }
+        }
+    }
+
+    if (isAuthenticated) {
+        cout << "Authentication successful." << endl;
+        cout << "Welcome, " << employeeType << " " << username << "!" << endl;
+    }
+    else {
+        cout << "Authentication failed." << endl;
+    }
+
+    file.close();
+
+    return 0;
+}
+
+
+
+
+///////////OLD CODE/////////////////////////////
+/*
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -18,6 +125,7 @@ using namespace std;
 
 
 #include "ChooserFactory.hpp"
+
 enum
 {
     ID_About = 1,
@@ -330,3 +438,4 @@ public:
 };
 
 wxIMPLEMENT_APP(MyApp);
+ */

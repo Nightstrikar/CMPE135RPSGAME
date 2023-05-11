@@ -11,6 +11,8 @@ private:
     string admin_id;
     string username;
     string password;
+    string clock_in_time;
+    string clock_out_time;
 public:
     void clock_in();
     void clock_out();

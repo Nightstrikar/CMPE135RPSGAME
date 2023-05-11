@@ -11,9 +11,7 @@ private:
     string admin_id;
     string username;
     string password;
-    std::chrono::system_clock::time_point clock_in_time;
-    std::chrono::system_clock::time_point clock_out_time;
-    int shift_duration;
+    
 public:
     void clock_in();
     void clock_out();

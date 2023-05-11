@@ -19,7 +19,7 @@
 using namespace std;
 
 int main() {
-    fstream file("/Users/alberto/CLionProjects/CMPE135RPSGAME/cmpe135Assignment3/users.txt", ios::in | ios::app);
+    fstream file("C:\\Users\\Alberto\\CLionProjects\\CMPE135RPSGAME\\cmpe135Assignment3\\users.txt", ios::in | ios::app);
     if (!file.is_open()) {
         cerr << "Error: could not open users file." << endl;
         return 1;

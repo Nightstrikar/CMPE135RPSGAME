@@ -14,7 +14,11 @@ add_executable(CMPE135RPSGAME
         cmpe135Assignment3/ChooserRandom.hpp
         cmpe135Assignment3/ChooserSmart.cpp
         cmpe135Assignment3/ChooserSmart.hpp
-        cmpe135Assignment3/main.cpp ../../Downloads/NhanHa/Admin.hpp ../../Downloads/NhanHa/Admin.hpp)
+        cmpe135Assignment3/main.cpp
+        cmpe135Assignment3/UserFactory.cpp
+        cmpe135Assignment3/Worker.cpp
+        cmpe135Assignment3/Workers.hpp
+        cmpe135Assignment3/Admin.cpp)
 
 
 find_package(wxWidgets CONFIG REQUIRED)

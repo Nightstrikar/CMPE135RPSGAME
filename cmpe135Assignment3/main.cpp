@@ -16,10 +16,11 @@
 #include <sstream>
 #include <algorithm>
 #include "UserFactory.hpp"
+#include "User.h"
 using namespace std;
 
 int main() {
-    fstream file("C:\\CMPE 135\\final assignment\\NhanHa\\NhanHa\\users.txt", ios::in | ios::app);
+    fstream file("C:\\Users\\Alberto\\CLionProjects\\CMPE135RPSGAME\\cmpe135Assignment3\\users.txt", ios::in | ios::app);
     if (!file.is_open()) {
         cerr << "Error: could not open users file." << endl;
         return 1;
@@ -101,7 +102,7 @@ int main() {
         if (isAuthenticated) {
             cout << "Authentication successful." << endl;
             cout << "Welcome, " << employeeType << " " << username << "!" << endl;
-            User* user = UserFactory::make_user(employeeType);
+            User* user = UserFactory::make_users(employeeType);
 
             if (employeeType == "admin") {
                 int option;

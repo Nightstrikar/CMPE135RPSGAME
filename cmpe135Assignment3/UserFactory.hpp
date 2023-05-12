@@ -12,7 +12,7 @@ using namespace std;
 
 class UserFactory {
 public:
-    static User* make_user(string which);
+    static User* make_users(string which);
 
 };
 

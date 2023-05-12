@@ -16,6 +16,7 @@ public:
     void clock_in();
     void clock_out();
     void shiftTotalTime();
+    void totalTimeShift();
     void create_worker(string username, string password, string employee_id);
     //void delete_Worker(Worker);
     //Worker find_worker(string employee_id);

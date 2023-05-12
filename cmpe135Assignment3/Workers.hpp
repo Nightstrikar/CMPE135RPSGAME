@@ -14,6 +14,7 @@ private:
 public:
     void clock_in();
     void clock_out();
+    void shiftTotalTime();
 };
 
 #endif

@@ -120,6 +120,7 @@ int main() {
                     user->clock_out();
                 }
                 else if (option == 3) {
+                    user->shiftTotalTime();
                     cout << user->getShiftDuration() << endl;
                 }
                 else if (option == 4) {
@@ -147,6 +148,7 @@ int main() {
                     user->clock_out();
                 }
                 else if (option == 3) {
+
                     cout << user->getShiftDuration() << endl;
                 }
                 else if (option == 4) {

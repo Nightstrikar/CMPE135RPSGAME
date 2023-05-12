@@ -10,11 +10,14 @@ class User {
 public:
     std::chrono::system_clock::time_point clock_in_time;
     std::chrono::system_clock::time_point clock_out_time;
-    int shift_duration;
+    int shift_duration = 13;
     virtual void clock_in() = 0;
     virtual void clock_out() = 0;
     virtual void shiftTotalTime() = 0;
     int getShiftDuration() const { return shift_duration; }
+    void setShiftDuration(int duration) {
+        shift_duration = duration;
+    }
 };
 
 

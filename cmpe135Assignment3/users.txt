@@ -1,2 +1,3 @@
-john doe123 employee
-poopp poop
+john doe123 admin
+jane smith456 worker
+bob brown789 worker

@@ -14,6 +14,7 @@ public:
     virtual void clock_in() = 0;
     virtual void clock_out() = 0;
     virtual void shiftTotalTime() = 0;
+    int getShiftDuration() const { return shift_duration; }
 };
 
 

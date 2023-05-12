@@ -15,11 +15,11 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
-
+#include "UserFactory.hpp"
 using namespace std;
 
 int main() {
-    fstream file("C:\\Users\\Alberto\\CLionProjects\\CMPE135RPSGAME\\cmpe135Assignment3\\users.txt", ios::in | ios::app);
+    fstream file("C:\\CMPE 135\\final assignment\\NhanHa\\NhanHa\\users.txt", ios::in | ios::app);
     if (!file.is_open()) {
         cerr << "Error: could not open users file." << endl;
         return 1;
@@ -29,6 +29,7 @@ int main() {
     bool isAuthenticated = false;
     string newUser;
     bool newUserBool = false;
+    bool exit = false;
     string fileUsername, filePassword, employeeType;
 
     cout << "Are you a new user? ";
@@ -96,12 +97,70 @@ int main() {
         }
     }
 
-    if (isAuthenticated) {
-        cout << "Authentication successful." << endl;
-        cout << "Welcome, " << employeeType << " " << username << "!" << endl;
-    }
-    else {
-        cout << "Authentication failed." << endl;
+    while (!exit) {
+        if (isAuthenticated) {
+            cout << "Authentication successful." << endl;
+            cout << "Welcome, " << employeeType << " " << username << "!" << endl;
+            User* user = UserFactory::make_user(employeeType);
+
+            if (employeeType == "admin") {
+                int option;
+                cout << "Please choose an option:" << endl;
+                cout << "1. Clock in" << endl;
+                cout << "2. Clock out" << endl;
+                cout << "3. Get shift total time" << endl;
+                cout << "4. Exit" << endl;
+                cin >> option;
+
+                if (option == 1) {
+                    user->clock_in();
+                }
+                else if (option == 2) {
+                    user->clock_out();
+                }
+                else if (option == 3) {
+                    cout << user->getShiftDuration() << endl;
+                }
+                else if (option == 4) {
+                    exit = true;
+                    cout << "Logging out..." << endl;
+                }
+                else {
+                    cout << "Invalid option. Please try again." << endl;
+                }
+
+            }
+            else {
+                int option;
+                cout << "Please choose an option:" << endl;
+                cout << "1. Clock in" << endl;
+                cout << "2. Clock out" << endl;
+                cout << "3. Get shift total time" << endl;
+                cout << "4. Exit" << endl;
+                cin >> option;
+
+                if (option == 1) {
+                    user->clock_in();
+                }
+                else if (option == 2) {
+                    user->clock_out();
+                }
+                else if (option == 3) {
+                    cout << user->getShiftDuration() << endl;
+                }
+                else if (option == 4) {
+                    exit = true;
+                    cout << "Logging out..." << endl;
+                }
+                else {
+                    cout << "Invalid option. Please try again." << endl;
+                }
+            }
+        }
+        else {
+            cout << "Authentication failed." << endl;
+            exit = true;
+        }
     }
 
     file.close();

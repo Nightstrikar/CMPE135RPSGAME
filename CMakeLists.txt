@@ -18,7 +18,9 @@ add_executable(CMPE135RPSGAME
         cmpe135Assignment3/UserFactory.cpp
         cmpe135Assignment3/Worker.cpp
         cmpe135Assignment3/Workers.hpp
-        cmpe135Assignment3/Admin.cpp)
+        cmpe135Assignment3/Admin.cpp
+        cmpe135Assignment3/Admin.hpp
+        cmpe135Assignment3/User.hpp)
 
 
 find_package(wxWidgets CONFIG REQUIRED)

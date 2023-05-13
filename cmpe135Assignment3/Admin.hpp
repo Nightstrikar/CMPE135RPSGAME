@@ -3,7 +3,7 @@
 #define Admin_hpp
 
 #include <stdio.h>
-#include "User.h"
+#include "User.hpp"
 using namespace std;
 
 class Admin : public User {
@@ -11,6 +11,8 @@ private:
     string admin_id;
     string username;
     string password;
+    chrono::system_clock::time_point clock_in_time;
+    chrono::system_clock::time_point clock_out_time;
     
 public:
     void clock_in();

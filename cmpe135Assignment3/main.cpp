@@ -16,7 +16,7 @@
 #include <sstream>
 #include <algorithm>
 #include "UserFactory.hpp"
-#include "User.h"
+#include "User.hpp"
 using namespace std;
 
 int main() {
@@ -97,12 +97,12 @@ int main() {
             }
         }
     }
-
+    if (isAuthenticated) {
+        cout << "Authentication successful." << endl;
+        cout << "Welcome, " << employeeType << " " << username << "!" << endl;
+        User* user = UserFactory::make_users(employeeType);
     while (!exit) {
-        if (isAuthenticated) {
-            cout << "Authentication successful." << endl;
-            cout << "Welcome, " << employeeType << " " << username << "!" << endl;
-            User* user = UserFactory::make_users(employeeType);
+
 
             if (employeeType == "admin") {
                 int option;
@@ -159,11 +159,12 @@ int main() {
                     cout << "Invalid option. Please try again." << endl;
                 }
             }
-        }
-        else {
-            cout << "Authentication failed." << endl;
-            exit = true;
-        }
+
+    }
+    }
+    else {
+        cout << "Authentication failed." << endl;
+        exit = true;
     }
 
     file.close();

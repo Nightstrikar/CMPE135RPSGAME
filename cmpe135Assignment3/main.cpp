@@ -17,10 +17,246 @@
 #include <algorithm>
 #include "UserFactory.hpp"
 #include "User.hpp"
+
 using namespace std;
 
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+#include <wx/wx.h>
+#endif
+enum
+{
+    ID_NewUser = 1,
+    ID_Start,
+    ID_Quit,
+    ID_Round,
+};
+
+using namespace std;
+class MyFrame : public wxFrame {
+public:
+    MyFrame(wxWindow* parent, const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
+        wxFileDialog openFileDialog(this, _("Open txt file"), "", "", "txt files (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+        if (openFileDialog.ShowModal() == wxID_CANCEL) {
+            return;
+        }
+        m_fileName = openFileDialog.GetPath().ToStdString();
+        ifstream inFile(m_fileName);
+
+        if (!inFile.is_open())
+        {
+            wxMessageBox(_("Unable to open file"));
+            return;
+        }
+        string fileContent((std::istreambuf_iterator<char>(inFile)),istreambuf_iterator<char>());
+        //wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+        //textCtrl->SetValue(fileContent);*/
+        wxButton* button = new wxButton(this, ID_NewUser, wxT("New User"));
+        button->Bind(wxEVT_BUTTON, &MyFrame::OnStart, this);
+
+        // Add the button to the sizer
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(button, wxSizerFlags().Center());
+
+    }
+private:
+    string m_fileName;
+    string username, password;
+    bool isAuthenticated = false;
+    string newUser;
+    bool newUserBool = false;
+    bool exit = false;
+
+    void OnStart(wxCommandEvent& event) {
+        cout << "Does this still work?" << endl;
+        wxTextEntryDialog dialog(this, wxT("Are you a new user?"));
+        if (dialog.ShowModal() == wxID_OK)
+        {
+            wxString wxnewUser = dialog.GetValue();
+            newUser = std::string(wxnewUser.mb_str());
+            transform(newUser.begin(), newUser.end(), newUser.begin(), ::tolower);
+            if (newUser == "yes" || newUser == "y") {
+                newUserBool = true;
+            }
+            else {
+                wxTextEntryDialog loginDialogUsername(this, wxT("Enter your username:"));
+                wxTextEntryDialog loginDialogPassword(this, wxT("Enter your password:"), wxT("Password"));
+                if (loginDialogUsername.ShowModal() == wxID_OK) {
+                    string enteredUsername = std::string(loginDialogUsername.GetValue().mb_str());
+                    if (loginDialogPassword.ShowModal() == wxID_OK) {
+                        string enteredPassword = std::string(loginDialogPassword.GetValue().mb_str());
+                        std::ifstream checkFile(m_fileName);
+                        cout << "Here we have the file name: " << m_fileName << endl;
+                        string line;
+                        string fileUserName;
+                        string filePassword;
+                        string employeeTypeFile;
+                        bool isAuthenticated = false;
+                        bool exit = false;
+                        checkFile.seekg(0, ios::beg);
+                        while (getline(checkFile, line) && !isAuthenticated) {
+                            istringstream iss(line);
+                            if (iss >> fileUserName >> filePassword >> employeeTypeFile) {
+                                cout << "User: " << fileUserName << "Password: " << filePassword << "employeeType: " << endl;
+                                if (enteredUsername == fileUserName && enteredPassword == filePassword) {
+                                    isAuthenticated = true;
+                                }
+                            }
+                        }
+                        if (isAuthenticated) {
+                            /*
+                            wxFrame* welcomeFrame = new wxFrame(nullptr, wxID_ANY, "Welcome User");
+                            wxStaticText* welcomeText = new wxStaticText(welcomeFrame, wxID_ANY, "Welcome " + enteredUsername);
+                            welcomeFrame->SetSize(400, 300);
+                            welcomeFrame->Centre();
+                            welcomeFrame->Show();
+                             */
+                            cout << "Authentication successful." << endl;
+                            cout << "Welcome, " << employeeTypeFile << " " << username << "!" << endl;
+                            User *user = UserFactory::make_users(employeeTypeFile);
+                            while (!exit) {
+
+
+                                if (employeeTypeFile == "admin") {
+                                    int option;
+                                    cout << "Please choose an option:" << endl;
+                                    cout << "1. Clock in" << endl;
+                                    cout << "2. Clock out" << endl;
+                                    cout << "3. Get shift total time" << endl;
+                                    cout << "4. Exit" << endl;
+                                    cin >> option;
+
+                                    if (option == 1) {
+                                        user->clock_in();
+                                    } else if (option == 2) {
+                                        user->clock_out();
+                                    } else if (option == 3) {
+                                        user->shiftTotalTime();
+                                        //cout << user->getShiftDuration() << endl;
+                                    } else if (option == 4) {
+                                        exit = true;
+                                        cout << "Logging out..." << endl;
+                                    } else {
+                                        cout << "Invalid option. Please try again." << endl;
+                                    }
+
+                                } else {
+                                    int option;
+                                    cout << "Please choose an option:" << endl;
+                                    cout << "1. Clock in" << endl;
+                                    cout << "2. Clock out" << endl;
+                                    cout << "3. Get shift total time" << endl;
+                                    cout << "4. Exit" << endl;
+                                    cin >> option;
+
+                                    if (option == 1) {
+                                        user->clock_in();
+                                    } else if (option == 2) {
+                                        user->clock_out();
+                                    } else if (option == 3) {
+
+                                        user->shiftTotalTime();
+                                    } else if (option == 4) {
+                                        exit = true;
+                                        cout << "Logging out..." << endl;
+                                    } else {
+                                        cout << "Invalid option. Please try again." << endl;
+                                    }
+                                }
+
+                            }
+                        }
+                        else {
+                            cout << "Authentication failed." << endl;
+                            exit = true;
+                        }
+                    }
+                        // Perform authentication check here
+                    // ...
+                }
+                else {
+                    // User cancelled login dialog
+                    return;
+                }
+            }
+            //wxMessageBox(wxT("Hello, ") + newUser + wxT("!"), wxT("Greeting"));
+        }
+        if (newUserBool) {
+            string newUsername, newPassword, newEmployeeType;
+            bool usernameExists = false;
+            bool validUserName = false;
+
+            // Check if username already exists
+            do {
+                usernameExists = false;
+                wxTextEntryDialog dialog2(this, wxT("Please enter your desired username: "));
+                if (dialog2.ShowModal() == wxID_OK)
+                {
+                    string enteredUsername = std::string(dialog2.GetValue().mb_str());
+                    ifstream checkFile(m_fileName);
+                    cout << "Here we have the file name: " << m_fileName << endl;
+                    string line;
+                    while (getline(checkFile, line)) {
+                        cout << "Hi" << endl;
+                        istringstream iss(line);
+                        string fileUsername, filePassword, fileEmployeeType;
+                        if (iss >> fileUsername >> filePassword >> fileEmployeeType) {
+                            if (enteredUsername == fileUsername) {
+                                usernameExists = true;
+                                cout << "Username already exists. Please choose a different username." << endl;
+                                wxMessageBox(_("Username already exists. Please choose a different username."));
+                                break;
+                            }
+                        }
+                    }
+                    if (!usernameExists) {
+                        validUserName = true;
+                        newUsername = enteredUsername;
+                    }
+                }
+            } while (!validUserName);
+
+            if (validUserName) {
+                cout << "Now we are going to need a password" << endl;
+                wxTextEntryDialog dialog3(this, wxT("Please enter your desired password: "));
+                if (dialog3.ShowModal() == wxID_OK){
+                    string enteredNewPassword = std::string(dialog3.GetValue().mb_str());
+                    newEmployeeType = "worker";
+                    ofstream outFile(m_fileName, ios::app);
+                    //outFile << endl;
+                    outFile << newUsername << " " << enteredNewPassword << " " << newEmployeeType << endl;
+
+
+                }
+                // Prompt for password and employee type
+                // Add new user to file
+            }
+        }
+    }
+};
+
+class MyApp : public wxApp {
+public:
+    virtual bool OnInit()
+    {
+        MyFrame* frame = new MyFrame(nullptr,"Timecard Application");
+        frame->SetClientSize(400, 600);
+        frame ->Center();
+        frame->Show(true);
+
+        return true;
+    }
+
+};
+
+wxIMPLEMENT_APP(MyApp);
+
+
+/*
 int main() {
-    fstream file("C:\\Users\\Alberto\\CLionProjects\\CMPE135RPSGAME\\cmpe135Assignment3\\users.txt", ios::in | ios::app);
+    fstream file("/Users/alberto/CLionProjects/CMPE135RPSGAME/cmpe135Assignment3/users.txt", ios::in | ios::app);
     if (!file.is_open()) {
         cerr << "Error: could not open users file." << endl;
         return 1;
@@ -172,7 +408,7 @@ int main() {
     return 0;
 }
 
-
+*/
 
 
 ///////////OLD CODE/////////////////////////////

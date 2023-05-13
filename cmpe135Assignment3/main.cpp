@@ -121,7 +121,7 @@ int main() {
                 }
                 else if (option == 3) {
                     user->shiftTotalTime();
-                    cout << user->getShiftDuration() << endl;
+                    //cout << user->getShiftDuration() << endl;
                 }
                 else if (option == 4) {
                     exit = true;
@@ -149,7 +149,7 @@ int main() {
                 }
                 else if (option == 3) {
 
-                    cout << user->getShiftDuration() << endl;
+                    user->shiftTotalTime();
                 }
                 else if (option == 4) {
                     exit = true;

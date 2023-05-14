@@ -1,7 +1,6 @@
 john doe123 admin
 jane smith456 worker
 bob brown789 worker
-
 Luna l123 worker
 Jose J999 worker
 Jesus Je00 worker

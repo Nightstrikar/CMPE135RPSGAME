@@ -298,6 +298,62 @@ private:
 
         }
     }
+    bool delete_user() {
+        wxTextEntryDialog loginDialogUsername(this, wxT("Enter the user's username:"));
+        if (loginDialogUsername.ShowModal() == wxID_OK) {
+            string enteredUsername = std::string(loginDialogUsername.GetValue().mb_str());
+
+           
+            std::ifstream inputFile(m_fileName);
+            cout << "Here we have the file name: " << m_fileName << endl;
+            string line;
+            string fileUserName;
+            bool isAuthenticated = false;
+
+            // new file to write to
+            std::ofstream tempFile(m_fileName + "_temp.txt"); 
+
+            // loops through the lines, finds matching username
+            while (getline(inputFile, line)) {
+                istringstream iss(line);
+                if (iss >> fileUserName) {
+                    cout << "User: " << fileUserName << endl;
+                    if (enteredUsername == fileUserName) {
+                        isAuthenticated = true;
+                        continue;
+                    }
+                }
+                tempFile << line << endl; 
+            }
+
+            inputFile.close();
+            tempFile.close();
+
+            //if it finds the user, copies contents from temp file to the new file
+            if (isAuthenticated) {
+                std::ifstream tempInputFile(m_fileName + "_temp.txt");
+                std::ofstream originalFile(m_fileName);
+
+                originalFile << tempInputFile.rdbuf();
+                originalFile.close();
+                tempInputFile.close();
+
+                std::remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
+                return true;
+            }
+            // else delete file
+            else {
+                std::remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
+                wxMessageBox("Invalid username.", "Authentication Failed", wxOK | wxICON_ERROR);
+                return false;
+            }
+        }
+    }
+
+
+
+
+
     void PunchOUT(wxCommandEvent& event){
         cout << "You wanted to punch out" << endl;
         wxMessageBox(_("Punching Out"));
@@ -401,7 +457,7 @@ private:
                             isAdmin = true;
                             isWorker = false;
                             while(!exit) {
-                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Exit";
+                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6. Exit";
                                 wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
                                 dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
                                 if (dialog.ShowModal() == wxID_OK) {
@@ -417,10 +473,19 @@ private:
                                         user->shiftTotalTime();
                                         wxMessageBox(_("Getting Shift Information"));
                                         //cout << user->getShiftDuration() << endl;
-                                    } else if (option == 5) {
+                                    } else if (option == 6) {
                                         exit = true;
                                         wxMessageBox(_("Logging out..."));
                                         cout << "Logging out..." << endl;
+                                    }
+                                    else if (option == 5) {
+                                        cout << "Attempting to delete user..." << endl;
+                                        if (delete_user()) {
+                                            wxMessageBox(_("Deleted User"));
+                                        }
+                                        else {
+                                            wxMessageBox(_("Failed to Delete User"));
+                                        }
                                     }
                                     else if (option == 4) {
                                         SetNewUser();

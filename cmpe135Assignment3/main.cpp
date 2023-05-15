@@ -401,7 +401,7 @@ private:
                             isAdmin = true;
                             isWorker = false;
                             while(!exit) {
-                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Exit";
+                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Exit";
                                 wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
                                 dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
                                 if (dialog.ShowModal() == wxID_OK) {
@@ -417,11 +417,17 @@ private:
                                         user->shiftTotalTime();
                                         wxMessageBox(_("Getting Shift Information"));
                                         //cout << user->getShiftDuration() << endl;
-                                    } else if (option == 4) {
+                                    } else if (option == 5) {
                                         exit = true;
                                         wxMessageBox(_("Logging out..."));
                                         cout << "Logging out..." << endl;
-                                    } else {
+                                    }
+                                    else if (option == 4) {
+                                        SetNewUser();
+                                        cout << "Creating a new user..." << endl;
+                                        wxMessageBox(_("New User Created"));
+                                    }
+                                    else {
                                         wxMessageBox(_("Invalid option. Please try again."));
                                         cout << "Invalid option. Please try again." << endl;
                                     }
@@ -492,12 +498,12 @@ private:
                     istringstream iss(line);
                     string fileUsername, filePassword, fileEmployeeType;
                     if (iss >> fileUsername >> filePassword >> fileEmployeeType) {
-                        if (enteredUsername == fileUsername) {
-                            usernameExists = true;
-                            cout << "Username already exists. Please choose a different username." << endl;
-                            wxMessageBox(_("Username already exists. Please choose a different username."));
-                            break;
-                        }
+if (enteredUsername == fileUsername) {
+    usernameExists = true;
+    cout << "Username already exists. Please choose a different username." << endl;
+    wxMessageBox(_("Username already exists. Please choose a different username."));
+    break;
+}
                     }
                 }
                 if (!usernameExists) {
@@ -510,7 +516,7 @@ private:
         if (validUserName) {
             cout << "Now we are going to need a password" << endl;
             wxTextEntryDialog dialog3(this, wxT("Please enter your desired password: "));
-            if (dialog3.ShowModal() == wxID_OK){
+            if (dialog3.ShowModal() == wxID_OK) {
                 string enteredNewPassword = std::string(dialog3.GetValue().mb_str());
                 newEmployeeType = "worker";
                 ofstream outFile(m_fileName, ios::app);
@@ -545,7 +551,69 @@ private:
         }
          */
 
-        //wxMessageBox(message, "Round Limit", wxOK | wxICON_INFORMATION);
+         //wxMessageBox(message, "Round Limit", wxOK | wxICON_INFORMATION);
+    }
+    void SetNewUser() {
+        int rounds = 0;
+        string newUsername, newPassword, newEmployeeType;
+        bool usernameExists = false;
+        bool validUserName = false;
+
+        // Check if username already exists
+        do {
+            usernameExists = false;
+            wxTextEntryDialog dialog2(this, wxT("Please enter your desired username: "));
+            if (dialog2.ShowModal() == wxID_OK)
+            {
+                string enteredUsername = std::string(dialog2.GetValue().mb_str());
+                ifstream checkFile(m_fileName);
+                cout << "Here we have the file name: " << m_fileName << endl;
+                string line;
+                while (getline(checkFile, line)) {
+                    cout << "Hi" << endl;
+                    istringstream iss(line);
+                    string fileUsername, filePassword, fileEmployeeType;
+                    if (iss >> fileUsername >> filePassword >> fileEmployeeType) {
+                        if (enteredUsername == fileUsername) {
+                            usernameExists = true;
+                            cout << "Username already exists. Please choose a different username." << endl;
+                            wxMessageBox(_("Username already exists. Please choose a different username."));
+                            break;
+                        }
+                    }
+                }
+                if (!usernameExists) {
+                    validUserName = true;
+                    newUsername = enteredUsername;
+                }
+            }
+        } while (!validUserName);
+
+        if (validUserName) {
+            cout << "Now we are going to need a password" << endl;
+            wxTextEntryDialog dialog3(this, wxT("Please enter your desired password: "));
+            if (dialog3.ShowModal() == wxID_OK) {
+                string enteredNewPassword = std::string(dialog3.GetValue().mb_str());
+                wxTextEntryDialog dialog4(this, wxT("Please enter the desired role for the user (admin/worker): "));
+                if (dialog4.ShowModal() == wxID_OK) {
+                    string userType = std::string(dialog4.GetValue().mb_str());
+                    transform(userType.begin(), userType.end(), userType.begin(), ::tolower);
+                    if (userType == "admin" || userType == "worker") {
+                        newEmployeeType = userType;
+                    }
+                    else {
+                        newEmployeeType = "worker";
+                    }
+                    
+                    ofstream outFile(m_fileName, ios::app);
+                    //outFile << endl;
+                    outFile << newUsername << " " << enteredNewPassword << " " << newEmployeeType << endl;
+                }
+
+
+
+            }
+        }
     }
     void OnAbout(wxCommandEvent& event)
     {

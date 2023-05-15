@@ -32,6 +32,8 @@ enum
     ID_Start,
     ID_Quit,
     ID_NewUsers,
+    ID_PunchIn,
+    ID_PunchOut,
 
 };
 
@@ -61,7 +63,7 @@ class MyFrame : public wxFrame {
 public:
     MyFrame(wxWindow* parent, const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 
-        int testing = 0;
+
 
         wxFileDialog openFileDialog(this, _("Open txt file"), "", "", "txt files (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
         // Create a static text control
@@ -77,6 +79,8 @@ public:
         Connect(ID_Quit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnExit));
         Connect(ID_Start, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnStartNewGame));
         Connect(ID_NewUser, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::SetNewUser));
+        Connect(ID_PunchIn, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::PunchIN));
+        Connect(ID_PunchOut, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::PunchOUT));
         wxMenu *menuFile = new wxMenu;
         menuFile->Append(ID_About, "&About\t", "Help string shown in status bar for this menu item");
         if(testing == 0) {
@@ -97,10 +101,28 @@ public:
             return;
         }
 
-        // create menu bar and attach menu to it
+        // create the Punch menu
+        wxMenu *menuPunch = new wxMenu;
+        menuPunch->Append(ID_PunchIn, "&Punch In", "Punch In");
+        menuPunch->Append(ID_PunchOut, "&Punch Out", "Punch Out");
+
+        // create menu bar and attach menus to it
         wxMenuBar *menuBar = new wxMenuBar();
         menuBar->Append(menuFile, "&Menu");
+        menuBar->Append(menuPunch, "&Punch");
         SetMenuBar(menuBar);
+
+
+        /* This is to delete the menuBar
+        size_t punchIndex = menuBar->FindMenu("&Punch");
+        if (punchIndex != wxNOT_FOUND) {
+            menuBar->Remove(punchIndex);
+        }
+        */
+        cout << "we are adding the punches" << endl;
+
+
+
 
         string fileContent((std::istreambuf_iterator<char>(inFile)),istreambuf_iterator<char>());
         //wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
@@ -132,7 +154,12 @@ private:
     string newUser;
     bool newUserBool = false;
     bool exit = false;
-    //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("New User"));
+    int testing = 0;
+    bool isWorker = false;
+    bool isAdmin = false;
+    //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("New User"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, wxT("button1"));
+    //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("new"), wxPoint(50, 50));
+
 
     void OnCreateChildFrame()
     {
@@ -262,6 +289,55 @@ private:
 
         }
     }
+    void PunchOUT(wxCommandEvent& event){
+        cout << "You wanted to punch out" << endl;
+        wxMessageBox(_("Punching Out"));
+        if(isAdmin == true){
+            wxMessageBox(_("You are a Admin punching out"));
+            cout << "5" << endl;
+            wxTextEntryDialog dialog3(this, wxT("You are a Admin"));
+        }
+        else if(isWorker == true){
+            wxMessageBox(_("You are a worker punching out"));
+            cout << "6" << endl;
+            wxTextEntryDialog dialog4(this, wxT("You are a Worker"));
+        }
+        else{
+            wxMessageBox(_("You are a nobody punching out"));
+            cout << "7" << endl;
+            wxTextEntryDialog dialog5(this, wxT("You are a Nobody"));
+        }
+
+    }
+    void PunchIN(wxCommandEvent& event){
+        cout << "you clicked the button" << endl;
+        wxMessageBox(_("Punching In"));
+        if(isAdmin == true){
+            wxMessageBox(_("You are a Admin punching in"));
+            cout << "1" << endl;
+            wxTextEntryDialog dialog6(this, wxT("You are a Admin"));
+            if (dialog6.ShowModal() == wxID_OK) {
+
+            }
+        }
+        else if(isWorker == true){
+            wxMessageBox(_("You are a worker punching in"));
+            cout << "2" << endl;
+            wxTextEntryDialog dialog7(this, wxT("You are a Worker"));
+            if (dialog7.ShowModal() == wxID_OK) {
+
+            }
+        }
+        else{
+            wxMessageBox(_("You are a nobody"));
+            cout << "3" << endl;
+            wxTextEntryDialog dialog8(this, wxT("You are a Nobody"));
+            if (dialog8.ShowModal() == wxID_OK) {
+
+            }
+        }
+
+    }
     void OnExit(wxCommandEvent& event)
     {
 
@@ -294,6 +370,7 @@ private:
                     }
                 }
                 if (isAuthenticated) {
+                    testing = 3;
                     /*
                     wxFrame* welcomeFrame = new wxFrame(nullptr, wxID_ANY, "Welcome User");
                     wxStaticText* welcomeText = new wxStaticText(welcomeFrame, wxID_ANY, "Welcome " + enteredUsername);
@@ -308,6 +385,8 @@ private:
                     while (!exit) {
 
                         if (employeeTypeFile == "admin") {
+                            isAdmin = true;
+                            isWorker = false;
                             int option;
                             cout << "Please choose an option:" << endl;
                             cout << "1. Clock in" << endl;
@@ -332,6 +411,8 @@ private:
 
                         } else {
                             int option;
+                            isWorker = true;
+                            isAdmin = false;
                             cout << "Please choose an option:" << endl;
                             cout << "1. Clock in" << endl;
                             cout << "2. Clock out" << endl;

@@ -157,6 +157,14 @@ private:
     int testing = 0;
     bool isWorker = false;
     bool isAdmin = false;
+    /*
+    string line;
+    string fileUserName;
+    string filePassword;
+    string employeeTypeFile;
+    bool isAuthenticated = false;
+    bool exit = false;
+     */
     //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("New User"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, wxT("button1"));
     //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("new"), wxPoint(50, 50));
 
@@ -219,9 +227,10 @@ private:
                             cout << "Authentication successful." << endl;
                             cout << "Welcome, " << employeeTypeFile << " " << username << "!" << endl;
                             User *user = UserFactory::make_users(employeeTypeFile);
-                            while (!exit) {
+                            //while (!exit) {
 
                                 if (employeeTypeFile == "admin") {
+
                                     int option;
                                     cout << "Please choose an option:" << endl;
                                     cout << "1. Clock in" << endl;
@@ -268,7 +277,7 @@ private:
                                     }
                                 }
 
-                            }
+                           // }//while
                         }
                         else {
                             cout << "Authentication failed." << endl;
@@ -292,6 +301,7 @@ private:
     void PunchOUT(wxCommandEvent& event){
         cout << "You wanted to punch out" << endl;
         wxMessageBox(_("Punching Out"));
+
         if(isAdmin == true){
             wxMessageBox(_("You are a Admin punching out"));
             cout << "5" << endl;
@@ -379,63 +389,80 @@ private:
                     welcomeFrame->Show();
                      */
                     //OnCreateChildFrame();
+                    wxMessageBox(_("Authentication successful." ));
                     cout << "Authentication successful." << endl;
+                    wxString message1 = wxString::Format("Welcome %s, you are logged in as %s", fileUserName, employeeTypeFile);
+                    wxMessageBox(message1, "Authentication Status", wxOK | wxICON_INFORMATION);
                     cout << "Welcome, " << employeeTypeFile << " " << username << "!" << endl;
                     User *user = UserFactory::make_users(employeeTypeFile);
-                    while (!exit) {
+                    //while (!exit) {
 
                         if (employeeTypeFile == "admin") {
                             isAdmin = true;
                             isWorker = false;
-                            int option;
-                            cout << "Please choose an option:" << endl;
-                            cout << "1. Clock in" << endl;
-                            cout << "2. Clock out" << endl;
-                            cout << "3. Get shift total time" << endl;
-                            cout << "4. Exit" << endl;
-                            cin >> option;
+                            while(!exit) {
+                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Exit";
+                                wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
+                                dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
+                                if (dialog.ShowModal() == wxID_OK) {
+                                    wxString input = dialog.GetValue();
+                                    int option = wxAtoi(input);
+                                    if (option == 1) {
+                                        user->clock_in();
+                                        wxMessageBox(_("Punching In"));
+                                    } else if (option == 2) {
+                                        user->clock_out();
+                                        wxMessageBox(_("Punching Out"));
+                                    } else if (option == 3) {
+                                        user->shiftTotalTime();
+                                        wxMessageBox(_("Getting Shift Information"));
+                                        //cout << user->getShiftDuration() << endl;
+                                    } else if (option == 4) {
+                                        exit = true;
+                                        wxMessageBox(_("Logging out..."));
+                                        cout << "Logging out..." << endl;
+                                    } else {
+                                        wxMessageBox(_("Invalid option. Please try again."));
+                                        cout << "Invalid option. Please try again." << endl;
+                                    }
+                                }
 
-                            if (option == 1) {
-                                user->clock_in();
-                            } else if (option == 2) {
-                                user->clock_out();
-                            } else if (option == 3) {
-                                user->shiftTotalTime();
-                                //cout << user->getShiftDuration() << endl;
-                            } else if (option == 4) {
-                                exit = true;
-                                cout << "Logging out..." << endl;
-                            } else {
-                                cout << "Invalid option. Please try again." << endl;
                             }
-
                         } else {
                             int option;
                             isWorker = true;
                             isAdmin = false;
-                            cout << "Please choose an option:" << endl;
-                            cout << "1. Clock in" << endl;
-                            cout << "2. Clock out" << endl;
-                            cout << "3. Get shift total time" << endl;
-                            cout << "4. Exit" << endl;
-                            cin >> option;
+                            while(!exit) {
+                                wxString messageWorker = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Exit";
+                                wxTextEntryDialog dialog(this, messageWorker, "Choose an Option");
+                                dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
+                                if (dialog.ShowModal() == wxID_OK) {
+                                    wxString input = dialog.GetValue();
+                                    int option = wxAtoi(input);
+                                    if (option == 1) {
+                                        user->clock_in();
+                                        wxMessageBox(_("Punching In"));
+                                    } else if (option == 2) {
+                                        user->clock_out();
+                                        wxMessageBox(_("Punching Out"));
+                                    } else if (option == 3) {
+                                        user->shiftTotalTime();
+                                        wxMessageBox(_("Getting Shift Information"));
+                                        //cout << user->getShiftDuration() << endl;
+                                    } else if (option == 4) {
+                                        exit = true;
+                                        wxMessageBox(_("Logging out..."));
+                                        cout << "Logging out..." << endl;
+                                    } else {
+                                        wxMessageBox(_("Invalid option. Please try again."));
+                                        cout << "Invalid option. Please try again." << endl;
+                                    }
+                                }
 
-                            if (option == 1) {
-                                user->clock_in();
-                            } else if (option == 2) {
-                                user->clock_out();
-                            } else if (option == 3) {
-
-                                user->shiftTotalTime();
-                            } else if (option == 4) {
-                                exit = true;
-                                cout << "Logging out..." << endl;
-                            } else {
-                                cout << "Invalid option. Please try again." << endl;
                             }
                         }
 
-                    }
+                    //}//while(!exit)
                 } else {
                     cout << "Authentication failed." << endl;
                     exit = true;

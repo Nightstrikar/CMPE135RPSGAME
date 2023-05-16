@@ -2,6 +2,8 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 
 void Admin::clock_in() {
@@ -13,6 +15,18 @@ void Admin::clock_in() {
     clock_in_time = time_now;
 }
 
+string Admin::getClock_in() {
+    // Convert the time_point to a time_t value
+    time_t time = chrono::system_clock::to_time_t(clock_in_time);
+    // Convert time_t to a tm value
+    tm* timeinfo = localtime(&time);
+    // Format the time using put_time
+    stringstream ss;
+    ss << put_time(timeinfo, "%Y-%m-%d %H:%M:%S");
+    // Get the string representation
+    string str_time = ss.str(); 
+    return str_time;
+}
 
 void Admin::clock_out() {
     auto time_now = chrono::system_clock::now();
@@ -29,6 +43,18 @@ void Admin::clock_out() {
     setShiftDuration(chrono::duration_cast<chrono::seconds>(shift_duration).count());
 }
 
+string Admin::getClock_out() {
+    // Convert the time_point to a time_t value
+    time_t time = chrono::system_clock::to_time_t(clock_out_time);
+    // Convert time_t to a tm value
+    tm* timeinfo = localtime(&time);
+    // Format the time using put_time
+    stringstream ss;
+    ss << put_time(timeinfo, "%Y-%m-%d %H:%M:%S");
+    // Get the string representation
+    string str_time = ss.str();
+    return str_time;
+}
 
 void Admin::totalTimeShift() {
     cout << "WE are getting it" << endl;

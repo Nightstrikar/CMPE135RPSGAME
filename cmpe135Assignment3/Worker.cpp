@@ -1,6 +1,9 @@
 #include "Worker.hpp"
 #include <iostream>
 #include <chrono>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 #pragma warning(disable : 4996)
 using namespace std;
 
@@ -11,6 +14,19 @@ void Worker::clock_in() {
     cout << "You are clocking in: " << ctime(&time_now_c);
     // Store the clock-in time
     clock_in_time = time_now;
+}
+
+string Worker::getClock_in() {
+    // Convert the time_point to a time_t value
+    time_t time = chrono::system_clock::to_time_t(clock_in_time);
+    // Convert time_t to a tm value
+    tm* timeinfo = localtime(&time);
+    // Format the time using put_time
+    stringstream ss;
+    ss << put_time(timeinfo, "%Y-%m-%d %H:%M:%S");
+    // Get the string representation
+    string str_time = ss.str();
+    return str_time;
 }
 
 void Worker::clock_out() {
@@ -25,6 +41,19 @@ void Worker::clock_out() {
     // Print the shift duration in seconds
     cout << "Shift duration: " << chrono::duration_cast<chrono::seconds>(shift_duration).count() << " seconds\n";
     setShiftDuration(chrono::duration_cast<chrono::seconds>(shift_duration).count());
+}
+
+string Worker::getClock_out() {
+    // Convert the time_point to a time_t value
+    time_t time = chrono::system_clock::to_time_t(clock_out_time);
+    // Convert time_t to a tm value
+    tm* timeinfo = localtime(&time);
+    // Format the time using put_time
+    stringstream ss;
+    ss << put_time(timeinfo, "%Y-%m-%d %H:%M:%S");
+    // Get the string representation
+    string str_time = ss.str();
+    return str_time;
 }
 
 void Worker::shiftTotalTime() {

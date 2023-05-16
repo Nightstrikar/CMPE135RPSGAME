@@ -17,6 +17,8 @@ private:
 public:
     void clock_in();
     void clock_out();
+    string getClock_in();
+    string getClock_out();
     void shiftTotalTime();
     void totalTimeShift();
     void create_worker(string username, string password, string employee_id);

@@ -456,6 +456,8 @@ private:
                         if (employeeTypeFile == "admin") {
                             isAdmin = true;
                             isWorker = false;
+                            string clock_in_time;
+                            string clock_out_time;
                             while(!exit) {
                                 wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6. Exit";
                                 wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
@@ -466,9 +468,13 @@ private:
                                     if (option == 1) {
                                         user->clock_in();
                                         wxMessageBox(_("Punching In"));
+                                        clock_in_time = user->getClock_in();
+                                        store_clock_in(clock_in_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 2) {
                                         user->clock_out();
                                         wxMessageBox(_("Punching Out"));
+                                        clock_out_time = user->getClock_out();
+                                        store_clock_out(clock_in_time, clock_out_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 3) {
                                         user->shiftTotalTime();
                                         wxMessageBox(_("Getting Shift Information"));
@@ -503,6 +509,8 @@ private:
                             int option;
                             isWorker = true;
                             isAdmin = false;
+                            string clock_in_time;
+                            string clock_out_time;
                             while(!exit) {
                                 wxString messageWorker = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Exit";
                                 wxTextEntryDialog dialog(this, messageWorker, "Choose an Option");
@@ -513,9 +521,13 @@ private:
                                     if (option == 1) {
                                         user->clock_in();
                                         wxMessageBox(_("Punching In"));
+                                        clock_in_time = user->getClock_in();
+                                        store_clock_in(clock_in_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 2) {
                                         user->clock_out();
                                         wxMessageBox(_("Punching Out"));
+                                        clock_out_time = user->getClock_out();
+                                        store_clock_out(clock_in_time, clock_out_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 3) {
                                         user->shiftTotalTime();
                                         wxMessageBox(_("Getting Shift Information"));
@@ -679,6 +691,72 @@ if (enteredUsername == fileUsername) {
 
             }
         }
+    }
+    void store_clock_in(string clock_in, string UserName, string Password, string TypeEmployee) {
+        ifstream inputFile(m_fileName);
+        string line;
+        string fileUserName;
+        string lineToReplace = UserName + " " + Password + " " + TypeEmployee + " " + clock_in;
+
+        // new file to write to
+        ofstream tempFile(m_fileName + "_temp.txt");
+
+        // loops through the lines, finds matching username
+        while (getline(inputFile, line)) {
+            istringstream iss(line);
+            if (iss >> fileUserName) {
+                if (UserName == fileUserName) {
+                    tempFile << lineToReplace << endl;
+                    continue;
+                }
+            }
+            tempFile << line << endl;
+        }
+
+        inputFile.close();
+        tempFile.close();
+        
+        ifstream tempInputFile(m_fileName + "_temp.txt");
+        ofstream originalFile(m_fileName);
+
+        originalFile << tempInputFile.rdbuf();
+        originalFile.close();
+        tempInputFile.close();
+
+        remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
+    }
+    void store_clock_out(string clock_in, string clock_out, string UserName, string Password, string TypeEmployee) {
+        ifstream inputFile(m_fileName);
+        string line;
+        string fileUserName;
+        string lineToReplace = UserName + " " + Password + " " + TypeEmployee + " " + clock_in + " " + clock_out;
+
+        // new file to write to
+        ofstream tempFile(m_fileName + "_temp.txt");
+
+        // loops through the lines, finds matching username
+        while (getline(inputFile, line)) {
+            istringstream iss(line);
+            if (iss >> fileUserName) {
+                if (UserName == fileUserName) {
+                    tempFile << lineToReplace << endl;
+                    continue;
+                }
+            }
+            tempFile << line << endl;
+        }
+
+        inputFile.close();
+        tempFile.close();
+
+        ifstream tempInputFile(m_fileName + "_temp.txt");
+        ofstream originalFile(m_fileName);
+
+        originalFile << tempInputFile.rdbuf();
+        originalFile.close();
+        tempInputFile.close();
+
+        remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
     }
     void OnAbout(wxCommandEvent& event)
     {

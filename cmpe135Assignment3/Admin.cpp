@@ -1,4 +1,5 @@
 #include "Admin.hpp"
+#include "PaySettings.hpp"
 #include <iostream>
 #include <chrono>
 #include <ctime>
@@ -65,6 +66,21 @@ void Admin::shiftTotalTime() {
 
     // Print the shift duration in seconds
     cout << "Shift duration: " << chrono::duration_cast<chrono::seconds>(shift_duration).count() << " seconds\n";
+}
+void Admin::setWorkerPay(PaySettings& workerPaySettings, double pay, double rate, string period, double overtimeRate) {
+    cout << "Are we here???" << endl;
+    workerPaySettings.set_pay_period(pay);
+    workerPaySettings.set_hourly_rate(rate);
+    workerPaySettings.set_overtime_rate(overtimeRate);
+    workerPaySettings.setPayPeriod(period);
+}
+
+double Admin::getWorkerPay(PaySettings& adminPaySettings) {
+    cout << "Are we here???" << endl;
+    double pay = adminPaySettings.get_pay_period();
+    double hourly_Rate = adminPaySettings.get_pay_hourly_rate();
+    double overtime_rate = adminPaySettings.get_overime_rate();
+    return 0;
 }
 
 

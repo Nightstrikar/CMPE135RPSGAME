@@ -1,7 +1,7 @@
 
 #ifndef Admin_hpp
 #define Admin_hpp
-
+#include "PaySettings.hpp"
 #include <stdio.h>
 #include "User.hpp"
 using namespace std;
@@ -22,6 +22,8 @@ public:
     void shiftTotalTime();
     void totalTimeShift();
     void create_worker(string username, string password, string employee_id);
+    void setWorkerPay(PaySettings& workerPaySettings, double pay, double rate, string period, double overtimeRate);
+    double getWorkerPay(PaySettings& adminPaySettings);
     //void delete_Worker(Worker);
     //Worker find_worker(string employee_id);
 };

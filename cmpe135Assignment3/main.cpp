@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "UserFactory.hpp"
 #include "User.hpp"
+#include "PaySettings.hpp"
 
 using namespace std;
 
@@ -61,16 +62,16 @@ private:
 
 class MyFrame : public wxFrame {
 public:
-    MyFrame(wxWindow* parent, const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
+    MyFrame(wxWindow *parent, const wxString &title) : wxFrame(NULL, wxID_ANY, title) {
 
 
-
-        wxFileDialog openFileDialog(this, _("Open txt file"), "", "", "txt files (*.txt)|*.txt", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+        wxFileDialog openFileDialog(this, _("Open txt file"), "", "", "txt files (*.txt)|*.txt",
+                                    wxFD_OPEN | wxFD_FILE_MUST_EXIST);
         // Create a static text control
-        wxStaticText* staticText = new wxStaticText(this, wxID_ANY, "WELCOME TO THE RABBIT TIMECARD APPLICATION");
+        wxStaticText *staticText = new wxStaticText(this, wxID_ANY, "WELCOME TO THE RABBIT TIMECARD APPLICATION");
 
         // Add the static text control to the sizer
-        wxBoxSizer* sizer1 = new wxBoxSizer(wxVERTICAL);
+        wxBoxSizer *sizer1 = new wxBoxSizer(wxVERTICAL);
         sizer1->Add(staticText, wxSizerFlags().Center());
 
         // Set the sizer for the frame
@@ -83,7 +84,7 @@ public:
         Connect(ID_PunchOut, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::PunchOUT));
         wxMenu *menuFile = new wxMenu;
         menuFile->Append(ID_About, "&About\t", "Help string shown in status bar for this menu item");
-        if(testing == 0) {
+        if (testing == 0) {
             menuFile->Append(ID_Start, "&Login", "Start a New Game");
             menuFile->Append(ID_NewUser, "&Create New User", "Create the round limiter");
         };
@@ -95,8 +96,7 @@ public:
         m_fileName = openFileDialog.GetPath().ToStdString();
         ifstream inFile(m_fileName);
 
-        if (!inFile.is_open())
-        {
+        if (!inFile.is_open()) {
             wxMessageBox(_("Unable to open file"));
             return;
         }
@@ -122,9 +122,7 @@ public:
         cout << "we are adding the punches" << endl;
 
 
-
-
-        string fileContent((std::istreambuf_iterator<char>(inFile)),istreambuf_iterator<char>());
+        string fileContent((std::istreambuf_iterator<char>(inFile)), istreambuf_iterator<char>());
         //wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
         //textCtrl->SetValue(fileContent);
 
@@ -169,28 +167,25 @@ private:
     //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("new"), wxPoint(50, 50));
 
 
-    void OnCreateChildFrame()
-    {
+    void OnCreateChildFrame() {
         // Instantiate child frame
-        ChildFrame* childFrame = new ChildFrame(this, wxID_ANY, "Child Frame");
+        ChildFrame *childFrame = new ChildFrame(this, wxID_ANY, "Child Frame");
         childFrame->SetSize(400, 300);
         childFrame->Centre();
         childFrame->Show(true);
         this->Hide();
     }
 
-    void OnStart(wxCommandEvent& event) {
+    void OnStart(wxCommandEvent &event) {
         cout << "Does this still work?" << endl;
         wxTextEntryDialog dialog(this, wxT("Are you a new user?"));
-        if (dialog.ShowModal() == wxID_OK)
-        {
+        if (dialog.ShowModal() == wxID_OK) {
             wxString wxnewUser = dialog.GetValue();
             newUser = std::string(wxnewUser.mb_str());
             transform(newUser.begin(), newUser.end(), newUser.begin(), ::tolower);
             if (newUser == "yes" || newUser == "y") {
                 newUserBool = true;
-            }
-            else {
+            } else {
                 wxTextEntryDialog loginDialogUsername(this, wxT("Enter your username:"));
                 wxTextEntryDialog loginDialogPassword(this, wxT("Enter your password:"), wxT("Password"));
                 if (loginDialogUsername.ShowModal() == wxID_OK) {
@@ -209,7 +204,8 @@ private:
                         while (getline(checkFile, line) && !isAuthenticated) {
                             istringstream iss(line);
                             if (iss >> fileUserName >> filePassword >> employeeTypeFile) {
-                                cout << "User: " << fileUserName << "Password: " << filePassword << "employeeType: " << endl;
+                                cout << "User: " << fileUserName << "Password: " << filePassword << "employeeType: "
+                                     << endl;
                                 if (enteredUsername == fileUserName && enteredPassword == filePassword) {
                                     isAuthenticated = true;
                                 }
@@ -229,65 +225,63 @@ private:
                             User *user = UserFactory::make_users(employeeTypeFile);
                             //while (!exit) {
 
-                                if (employeeTypeFile == "admin") {
+                            if (employeeTypeFile == "admin") {
 
-                                    int option;
-                                    cout << "Please choose an option:" << endl;
-                                    cout << "1. Clock in" << endl;
-                                    cout << "2. Clock out" << endl;
-                                    cout << "3. Get shift total time" << endl;
-                                    cout << "4. Exit" << endl;
-                                    cin >> option;
+                                int option;
+                                cout << "Please choose an option:" << endl;
+                                cout << "1. Clock in" << endl;
+                                cout << "2. Clock out" << endl;
+                                cout << "3. Get shift total time" << endl;
+                                cout << "4. Exit" << endl;
+                                cin >> option;
 
-                                    if (option == 1) {
-                                        user->clock_in();
-                                    } else if (option == 2) {
-                                        user->clock_out();
-                                    } else if (option == 3) {
-                                        user->shiftTotalTime();
-                                        //cout << user->getShiftDuration() << endl;
-                                    } else if (option == 4) {
-                                        exit = true;
-                                        cout << "Logging out..." << endl;
-                                    } else {
-                                        cout << "Invalid option. Please try again." << endl;
-                                    }
-
+                                if (option == 1) {
+                                    user->clock_in();
+                                } else if (option == 2) {
+                                    user->clock_out();
+                                } else if (option == 3) {
+                                    user->shiftTotalTime();
+                                    //cout << user->getShiftDuration() << endl;
+                                } else if (option == 4) {
+                                    exit = true;
+                                    cout << "Logging out..." << endl;
                                 } else {
-                                    int option;
-                                    cout << "Please choose an option:" << endl;
-                                    cout << "1. Clock in" << endl;
-                                    cout << "2. Clock out" << endl;
-                                    cout << "3. Get shift total time" << endl;
-                                    cout << "4. Exit" << endl;
-                                    cin >> option;
-
-                                    if (option == 1) {
-                                        user->clock_in();
-                                    } else if (option == 2) {
-                                        user->clock_out();
-                                    } else if (option == 3) {
-
-                                        user->shiftTotalTime();
-                                    } else if (option == 4) {
-                                        exit = true;
-                                        cout << "Logging out..." << endl;
-                                    } else {
-                                        cout << "Invalid option. Please try again." << endl;
-                                    }
+                                    cout << "Invalid option. Please try again." << endl;
                                 }
 
-                           // }//while
-                        }
-                        else {
+                            } else {
+                                int option;
+                                cout << "Please choose an option:" << endl;
+                                cout << "1. Clock in" << endl;
+                                cout << "2. Clock out" << endl;
+                                cout << "3. Get shift total time" << endl;
+                                cout << "4. Exit" << endl;
+                                cin >> option;
+
+                                if (option == 1) {
+                                    user->clock_in();
+                                } else if (option == 2) {
+                                    user->clock_out();
+                                } else if (option == 3) {
+
+                                    user->shiftTotalTime();
+                                } else if (option == 4) {
+                                    exit = true;
+                                    cout << "Logging out..." << endl;
+                                } else {
+                                    cout << "Invalid option. Please try again." << endl;
+                                }
+                            }
+
+                            // }//while
+                        } else {
                             cout << "Authentication failed." << endl;
                             exit = true;
                         }
                     }
-                        // Perform authentication check here
+                    // Perform authentication check here
                     // ...
-                }
-                else {
+                } else {
                     // User cancelled login dialog
                     return;
                 }
@@ -298,12 +292,13 @@ private:
 
         }
     }
+
     bool delete_user() {
         wxTextEntryDialog loginDialogUsername(this, wxT("Enter the user's username:"));
         if (loginDialogUsername.ShowModal() == wxID_OK) {
             string enteredUsername = std::string(loginDialogUsername.GetValue().mb_str());
 
-           
+
             std::ifstream inputFile(m_fileName);
             cout << "Here we have the file name: " << m_fileName << endl;
             string line;
@@ -311,7 +306,7 @@ private:
             bool isAuthenticated = false;
 
             // new file to write to
-            std::ofstream tempFile(m_fileName + "_temp.txt"); 
+            std::ofstream tempFile(m_fileName + "_temp.txt");
 
             // loops through the lines, finds matching username
             while (getline(inputFile, line)) {
@@ -323,7 +318,7 @@ private:
                         continue;
                     }
                 }
-                tempFile << line << endl; 
+                tempFile << line << endl;
             }
 
             inputFile.close();
@@ -341,7 +336,7 @@ private:
                 std::remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
                 return true;
             }
-            // else delete file
+                // else delete file
             else {
                 std::remove((m_fileName + "_temp.txt").c_str()); // Delete the temporary file
                 wxMessageBox("Invalid username.", "Authentication Failed", wxOK | wxICON_ERROR);
@@ -349,6 +344,7 @@ private:
             }
         }
     }
+
 
 
 
@@ -459,7 +455,9 @@ private:
                             string clock_in_time;
                             string clock_out_time;
                             while(!exit) {
-                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6. Exit";
+                                Admin admin;
+                                PaySettings workerPaySettings;
+                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6.Set Worker Pay\n 7.Get Worker Pay\n6. Exit";
                                 wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
                                 dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
                                 if (dialog.ShowModal() == wxID_OK) {
@@ -497,6 +495,27 @@ private:
                                         SetNewUser();
                                         cout << "Creating a new user..." << endl;
                                         wxMessageBox(_("New User Created"));
+                                    }
+                                    else if (option == 7) {
+                                        //SetNewUser();
+                                        // Create an instance of Admin
+                                        // Create an instance of PaySettings for the worker
+                                        // Set the worker's pay using the setWorkerPay function
+                                        admin.setWorkerPay(workerPaySettings, 10.0, 1.5, "monthly", 2.0);
+
+                                        cout << "Paysettings 1" << endl;
+                                        wxMessageBox(_("TESTING"));
+                                    }
+                                    else if (option == 8) {
+                                        //SetNewUser();
+                                        double workerPay = admin.getWorkerPay(workerPaySettings);
+                                        cout << "Paysettings 2" << endl;
+
+                                        // Convert the pay value to a string
+                                        wxString payString = wxString::Format("%.2f", workerPay);
+
+                                        // Show the pay value in a message box
+                                        wxMessageBox("Worker's Pay: " + payString, "Pay Information", wxOK | wxICON_INFORMATION);
                                     }
                                     else {
                                         wxMessageBox(_("Invalid option. Please try again."));

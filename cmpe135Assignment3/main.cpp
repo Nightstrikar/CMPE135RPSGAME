@@ -14,6 +14,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <chrono>
+#include <iomanip>
 #include <algorithm>
 #include "UserFactory.hpp"
 #include "User.hpp"
@@ -103,13 +106,13 @@ public:
 
         // create the Punch menu
         wxMenu *menuPunch = new wxMenu;
-        menuPunch->Append(ID_PunchIn, "&Punch In", "Punch In");
-        menuPunch->Append(ID_PunchOut, "&Punch Out", "Punch Out");
+        //menuPunch->Append(ID_PunchIn, "&Punch In", "Punch In");
+        //menuPunch->Append(ID_PunchOut, "&Punch Out", "Punch Out");
 
         // create menu bar and attach menus to it
         wxMenuBar *menuBar = new wxMenuBar();
         menuBar->Append(menuFile, "&Menu");
-        menuBar->Append(menuPunch, "&Punch");
+        //menuBar->Append(menuPunch, "&Punch");
         SetMenuBar(menuBar);
 
 
@@ -143,6 +146,8 @@ public:
         SetSizer(sizer);
          */
 
+
+
     }
 
 private:
@@ -165,133 +170,11 @@ private:
      */
     //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("New User"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, wxT("button1"));
     //wxButton* button1 = new wxButton(this, ID_NewUsers, wxT("new"), wxPoint(50, 50));
+    struct Shift {
+        std::chrono::system_clock::time_point clockInTime;
+        std::chrono::system_clock::time_point clockOutTime;
+    };
 
-
-    void OnCreateChildFrame() {
-        // Instantiate child frame
-        ChildFrame *childFrame = new ChildFrame(this, wxID_ANY, "Child Frame");
-        childFrame->SetSize(400, 300);
-        childFrame->Centre();
-        childFrame->Show(true);
-        this->Hide();
-    }
-
-    void OnStart(wxCommandEvent &event) {
-        cout << "Does this still work?" << endl;
-        wxTextEntryDialog dialog(this, wxT("Are you a new user?"));
-        if (dialog.ShowModal() == wxID_OK) {
-            wxString wxnewUser = dialog.GetValue();
-            newUser = std::string(wxnewUser.mb_str());
-            transform(newUser.begin(), newUser.end(), newUser.begin(), ::tolower);
-            if (newUser == "yes" || newUser == "y") {
-                newUserBool = true;
-            } else {
-                wxTextEntryDialog loginDialogUsername(this, wxT("Enter your username:"));
-                wxTextEntryDialog loginDialogPassword(this, wxT("Enter your password:"), wxT("Password"));
-                if (loginDialogUsername.ShowModal() == wxID_OK) {
-                    string enteredUsername = std::string(loginDialogUsername.GetValue().mb_str());
-                    if (loginDialogPassword.ShowModal() == wxID_OK) {
-                        string enteredPassword = std::string(loginDialogPassword.GetValue().mb_str());
-                        std::ifstream checkFile(m_fileName);
-                        cout << "Here we have the file name: " << m_fileName << endl;
-                        string line;
-                        string fileUserName;
-                        string filePassword;
-                        string employeeTypeFile;
-                        bool isAuthenticated = false;
-                        bool exit = false;
-                        checkFile.seekg(0, ios::beg);
-                        while (getline(checkFile, line) && !isAuthenticated) {
-                            istringstream iss(line);
-                            if (iss >> fileUserName >> filePassword >> employeeTypeFile) {
-                                cout << "User: " << fileUserName << "Password: " << filePassword << "employeeType: "
-                                     << endl;
-                                if (enteredUsername == fileUserName && enteredPassword == filePassword) {
-                                    isAuthenticated = true;
-                                }
-                            }
-                        }
-                        if (isAuthenticated) {
-                            /*
-                            wxFrame* welcomeFrame = new wxFrame(nullptr, wxID_ANY, "Welcome User");
-                            wxStaticText* welcomeText = new wxStaticText(welcomeFrame, wxID_ANY, "Welcome " + enteredUsername);
-                            welcomeFrame->SetSize(400, 300);
-                            welcomeFrame->Centre();
-                            welcomeFrame->Show();
-                             */
-                            //OnCreateChildFrame();
-                            cout << "Authentication successful." << endl;
-                            cout << "Welcome, " << employeeTypeFile << " " << username << "!" << endl;
-                            User *user = UserFactory::make_users(employeeTypeFile);
-                            //while (!exit) {
-
-                            if (employeeTypeFile == "admin") {
-
-                                int option;
-                                cout << "Please choose an option:" << endl;
-                                cout << "1. Clock in" << endl;
-                                cout << "2. Clock out" << endl;
-                                cout << "3. Get shift total time" << endl;
-                                cout << "4. Exit" << endl;
-                                cin >> option;
-
-                                if (option == 1) {
-                                    user->clock_in();
-                                } else if (option == 2) {
-                                    user->clock_out();
-                                } else if (option == 3) {
-                                    user->shiftTotalTime();
-                                    //cout << user->getShiftDuration() << endl;
-                                } else if (option == 4) {
-                                    exit = true;
-                                    cout << "Logging out..." << endl;
-                                } else {
-                                    cout << "Invalid option. Please try again." << endl;
-                                }
-
-                            } else {
-                                int option;
-                                cout << "Please choose an option:" << endl;
-                                cout << "1. Clock in" << endl;
-                                cout << "2. Clock out" << endl;
-                                cout << "3. Get shift total time" << endl;
-                                cout << "4. Exit" << endl;
-                                cin >> option;
-
-                                if (option == 1) {
-                                    user->clock_in();
-                                } else if (option == 2) {
-                                    user->clock_out();
-                                } else if (option == 3) {
-
-                                    user->shiftTotalTime();
-                                } else if (option == 4) {
-                                    exit = true;
-                                    cout << "Logging out..." << endl;
-                                } else {
-                                    cout << "Invalid option. Please try again." << endl;
-                                }
-                            }
-
-                            // }//while
-                        } else {
-                            cout << "Authentication failed." << endl;
-                            exit = true;
-                        }
-                    }
-                    // Perform authentication check here
-                    // ...
-                } else {
-                    // User cancelled login dialog
-                    return;
-                }
-            }
-            //wxMessageBox(wxT("Hello, ") + newUser + wxT("!"), wxT("Greeting"));
-        }
-        if (newUserBool) {
-
-        }
-    }
 
     bool delete_user() {
         wxTextEntryDialog loginDialogUsername(this, wxT("Enter the user's username:"));
@@ -398,6 +281,74 @@ private:
     {
 
         Close(true);
+    }
+
+    void getTotalAmountOfShiftsAndTime(){
+        std::ifstream inputFile(m_fileName);
+        if (!inputFile.is_open()) {
+            std::cout << "Failed to open the input file." << std::endl;
+        }
+
+        std::string line;
+        std::vector<Shift> shifts;
+
+        while (std::getline(inputFile, line)) {
+            std::istringstream iss(line);
+            std::string username, password, id;
+            std::vector<std::string> clockTimes;
+
+            // Parse the username, password, and ID
+            if (iss >> username >> password >> id && username == "jane") {
+                std::string shiftTimeStr;
+
+                // Parse the clock-in and clock-out times
+                while (iss >> shiftTimeStr) {
+                    clockTimes.push_back(shiftTimeStr);
+                }
+
+                // Ensure there are pairs of clock-in and clock-out times
+                if (clockTimes.size() % 2 == 0) {
+                    for (size_t i = 0; i < clockTimes.size(); i += 2) {
+                        Shift shift;
+                        std::tm tmIn = {};
+                        std::tm tmOut = {};
+
+                        // Parse the clock-in time
+                        std::istringstream issIn(clockTimes[i]);
+                        issIn >> std::get_time(&tmIn, "%Y-%m-%d %H:%M:%S");
+                        shift.clockInTime = std::chrono::system_clock::from_time_t(std::mktime(&tmIn));
+
+                        // Parse the clock-out time
+                        std::istringstream issOut(clockTimes[i + 1]);
+                        issOut >> std::get_time(&tmOut, "%Y-%m-%d %H:%M:%S");
+                        shift.clockOutTime = std::chrono::system_clock::from_time_t(std::mktime(&tmOut));
+
+                        shifts.push_back(shift);
+
+                        // Convert clock-in time to std::time_t
+                        std::time_t clockInTimeT = std::chrono::system_clock::to_time_t(shift.clockInTime);
+                        // Print the clock-in time
+                        std::cout << "Clock-in time: "
+                                  << std::put_time(std::localtime(&clockInTimeT), "%Y-%m-%d %H:%M:%S") << std::endl;
+                        std::time_t clockOutTimeT = std::chrono::system_clock::to_time_t(shift.clockOutTime);
+
+                        // Print the clock-in time
+                        std::cout << "Clock-out time: "
+                                  << std::put_time(std::localtime(&clockOutTimeT), "%Y-%m-%d %H:%M:%S") << std::endl;
+
+                    }
+                }
+            }
+        }
+        // Calculate the shift information for Jane
+        int shiftCount = shifts.size();
+        std::cout << "Number of Shifts for Jane: " << shiftCount << std::endl;
+
+        for (int i = 0; i < shiftCount; ++i) {
+            const Shift& shift = shifts[i];
+            std::chrono::duration<double> shiftDuration = shift.clockOutTime - shift.clockInTime;
+            std::cout << "Shift " << (i + 1) << " Duration: " << shiftDuration.count() << " seconds" << std::endl;
+        }
     }
 
     void OnStartNewGame(wxCommandEvent& event){
@@ -579,6 +530,7 @@ private:
                             isAdmin = false;
                             string clock_in_time;
                             string clock_out_time;
+                            Worker worker;
                             while(!exit) {
                                 wxString messageWorker = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Exit";
                                 wxTextEntryDialog dialog(this, messageWorker, "Choose an Option");
@@ -587,19 +539,22 @@ private:
                                     wxString input = dialog.GetValue();
                                     int option = wxAtoi(input);
                                     if (option == 1) {
-                                        user->clock_in();
+                                        worker.clock_in();
                                         wxMessageBox(_("Punching In"));
-                                        clock_in_time = user->getClock_in();
+                                        clock_in_time = worker.getClock_in();
                                         store_clock_in(clock_in_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 2) {
-                                        user->clock_out();
+                                        worker.clock_out();
                                         wxMessageBox(_("Punching Out"));
-                                        clock_out_time = user->getClock_out();
+                                        clock_out_time = worker.getClock_out();
                                         store_clock_out(clock_in_time, clock_out_time, fileUserName, filePassword, employeeTypeFile);
                                     } else if (option == 3) {
-                                        user->shiftTotalTime();
-                                        wxMessageBox(_("Getting Shift Information"));
-                                        //cout << user->getShiftDuration() << endl;
+                                        worker.shiftTotalTime();
+                                        std::string shiftTotalTimeString = std::to_string(worker.getShiftTotalTime());
+                                        wxString message = "Shift Total Time: " + wxString(shiftTotalTimeString);
+                                        getTotalAmountOfShiftsAndTime();
+                                        wxMessageBox(message, "Shift Information", wxICON_INFORMATION | wxOK);
+
                                     } else if (option == 4) {
                                         exit = true;
                                         wxMessageBox(_("Logging out..."));

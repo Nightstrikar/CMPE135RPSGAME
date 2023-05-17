@@ -36,11 +36,7 @@ void Worker::clock_out() {
     cout << "You are clocking out: " << ctime(&time_now_c);
     // Store the clock-out time
     clock_out_time = time_now;
-    // Calculate the shift duration
-    chrono::duration<double> shift_duration = clock_out_time - clock_in_time;
-    // Print the shift duration in seconds
-    cout << "Shift duration: " << chrono::duration_cast<chrono::seconds>(shift_duration).count() << " seconds\n";
-    setShiftDuration(chrono::duration_cast<chrono::seconds>(shift_duration).count());
+
 }
 
 string Worker::getClock_out() {
@@ -58,7 +54,15 @@ string Worker::getClock_out() {
 
 void Worker::shiftTotalTime() {
     // Calculate the shift duration
-
+// Calculate the shift duration
+    chrono::duration<double> shift_duration = clock_out_time - clock_in_time;
     // Print the shift duration in seconds
-    cout << "Shifts Entire duration: " << shift_duration << " seconds\n";
+    cout << "Shift duration: " << chrono::duration_cast<chrono::seconds>(shift_duration).count() << " seconds\n";
+    setShiftDuration(chrono::duration_cast<chrono::seconds>(shift_duration).count());
+    // Print the shift duration in seconds
+    //cout << "Shifts Entire duration: " << shift_duration << " seconds\n";
+}
+
+int Worker::getShiftTotalTime() {
+    return shift_duration;
 }

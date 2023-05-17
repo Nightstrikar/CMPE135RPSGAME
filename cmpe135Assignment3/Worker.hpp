@@ -19,6 +19,7 @@ public:
     string getClock_in();
     string getClock_out();
     void shiftTotalTime();
+    int getShiftTotalTime();
 };
 
 #endif

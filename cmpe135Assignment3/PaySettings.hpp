@@ -5,7 +5,11 @@
 #include "User.hpp"
 #include <iostream>
 #include <chrono>
+#include <wx/wxprec.h>
 
+#ifndef WX_PRECOMP
+#include <wx/wx.h>
+#endif
 
 using namespace std;
 

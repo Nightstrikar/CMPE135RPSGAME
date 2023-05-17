@@ -20,6 +20,7 @@ public:
     string getClock_in();
     string getClock_out();
     void shiftTotalTime();
+
     void totalTimeShift();
     void create_worker(string username, string password, string employee_id);
     void setWorkerPay(PaySettings& workerPaySettings, double pay, double rate, string period, double overtimeRate);

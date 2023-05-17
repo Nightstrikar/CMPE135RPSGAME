@@ -73,6 +73,7 @@ void Admin::setWorkerPay(PaySettings& workerPaySettings, double pay, double rate
     workerPaySettings.set_hourly_rate(rate);
     workerPaySettings.set_overtime_rate(overtimeRate);
     workerPaySettings.setPayPeriod(period);
+    cout<< "Pay: "<<pay << "rate: "<< rate << "overtime: " << overtimeRate << "period " <<period <<endl;
 }
 
 double Admin::getWorkerPay(PaySettings& adminPaySettings) {

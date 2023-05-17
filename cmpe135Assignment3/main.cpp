@@ -18,7 +18,7 @@
 #include "UserFactory.hpp"
 #include "User.hpp"
 #include "PaySettings.hpp"
-
+#include "wx/string.h"
 using namespace std;
 
 #include <wx/wxprec.h>
@@ -344,12 +344,6 @@ private:
             }
         }
     }
-
-
-
-
-
-
     void PunchOUT(wxCommandEvent& event){
         cout << "You wanted to punch out" << endl;
         wxMessageBox(_("Punching Out"));
@@ -457,7 +451,7 @@ private:
                             while(!exit) {
                                 Admin admin;
                                 PaySettings workerPaySettings;
-                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6.Set Worker Pay\n 7.Get Worker Pay\n6. Exit";
+                                wxString messageAdmin = "Please choose an option:\n1. Clock in\n2. Clock out\n3. Get shift total time\n4. Create New User\n5. Delete an account\n6. Set Worker Pay\n7. Get Worker Pay\n8. Exit";
                                 wxTextEntryDialog dialog(this, messageAdmin, "Choose an Option");
                                 dialog.SetTextValidator(wxFILTER_DIGITS); // Only allow digits as input
                                 if (dialog.ShowModal() == wxID_OK) {
@@ -477,7 +471,7 @@ private:
                                         user->shiftTotalTime();
                                         wxMessageBox(_("Getting Shift Information"));
                                         //cout << user->getShiftDuration() << endl;
-                                    } else if (option == 6) {
+                                    } else if (option == 8) {
                                         exit = true;
                                         wxMessageBox(_("Logging out..."));
                                         cout << "Logging out..." << endl;
@@ -496,24 +490,79 @@ private:
                                         cout << "Creating a new user..." << endl;
                                         wxMessageBox(_("New User Created"));
                                     }
-                                    else if (option == 7) {
-                                        //SetNewUser();
+                                    else if (option == 6) {
+                                        // SetNewUser();
                                         // Create an instance of Admin
                                         // Create an instance of PaySettings for the worker
                                         // Set the worker's pay using the setWorkerPay function
-                                        admin.setWorkerPay(workerPaySettings, 10.0, 1.5, "monthly", 2.0);
+                                        wxTextEntryDialog payDialog(nullptr, "Enter salary pay:", "Pay");
+                                        if (payDialog.ShowModal() == wxID_OK) {
+                                            wxString payValue = payDialog.GetValue();
+                                            double pay = 0.0;
+                                            if (!payValue.ToDouble(&pay)) {
+                                                wxMessageBox("Invalid pay value!", "Error", wxICON_ERROR | wxOK);
+                                            }
 
-                                        cout << "Paysettings 1" << endl;
-                                        wxMessageBox(_("TESTING"));
+                                            wxTextEntryDialog rateDialog(nullptr, "Enter the hourly rate:", "Hourly Rate");
+                                            if (rateDialog.ShowModal() == wxID_OK) {
+                                                wxString rateValue = rateDialog.GetValue();
+                                                double rate = 0.0;
+                                                if (!rateValue.ToDouble(&rate)) {
+                                                    wxMessageBox("Invalid rate value!", "Error", wxICON_ERROR | wxOK);
+                                                }
+                                                wxTextEntryDialog periodDialog(nullptr, "Enter the pay period:", "Pay Period");
+                                                if (periodDialog.ShowModal() == wxID_OK) {
+                                                    string period = std::string(periodDialog.GetValue().mb_str());
+                                                    wxTextEntryDialog overtimeRateDialog(nullptr,
+                                                                                         "Enter overtime rate:",
+                                                                                         "Overtime Rate");
+                                                    if (overtimeRateDialog.ShowModal() == wxID_OK) {
+                                                        wxString overtimeRateValue = overtimeRateDialog.GetValue();
+                                                        double overtimeRate = 0.0;
+                                                        if (!overtimeRateValue.ToDouble(&overtimeRate)) {
+                                                            wxMessageBox("Invalid overtime rate value!", "Error",
+                                                                         wxICON_ERROR | wxOK);
+                                                        }
+
+                                                        // Use the obtained values (pay, rate, period, overtimeRate) here
+                                                        // ...
+                                                        admin.setWorkerPay(workerPaySettings,pay,rate,period,overtimeRate );
+                                                        wxMessageBox("Values entered:\n\nSalary Pay: " + payValue +
+                                                                     "\nHourly Rate: " + rateValue +
+                                                                     "\nPay Period: " + period +
+                                                                     "\nOvertime Rate: " + overtimeRateValue,
+                                                                     "Input Values", wxICON_INFORMATION | wxOK);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //admin.setWorkerPay(workerPaySettings, 10.0, 1.5, "monthly", 2.0);
+
+                                        //cout << "Paysettings 1" << endl;
+                                        //wxMessageBox(_("TESTING"));
                                     }
-                                    else if (option == 8) {
+                                    else if (option == 7) {
                                         //SetNewUser();
+                                        // Get the worker's pay settings using the Admin class
+                                        wxMessageBox(_("Getting the workers pay"));
+                                        double adminPaySettings = admin.getWorkerPay(workerPaySettings);
+                                        double workerPays = workerPaySettings.get_pay_period();
+                                        double hourlyRate = workerPaySettings.get_pay_hourly_rate();
+                                        double overtimeRate = workerPaySettings.get_overime_rate();
+                                        string payPeriod = workerPaySettings.getPayPeriod();
+                                        // Output the worker's pay settings
+                                        cout << "Worker's pay: $" << workerPays << endl;
+                                        cout << "Hourly rate: $" << hourlyRate << endl;
+                                        cout << "Overtime rate: $" << overtimeRate << endl;
+                                        cout << "Pay period type: " << payPeriod << endl;
+
+                                        // Output the worker's pay settings obtained by the Admin class
+                                        cout << "Admin's worker pay: $" << adminPaySettings << endl;
+
                                         double workerPay = admin.getWorkerPay(workerPaySettings);
                                         cout << "Paysettings 2" << endl;
-
                                         // Convert the pay value to a string
                                         wxString payString = wxString::Format("%.2f", workerPay);
-
                                         // Show the pay value in a message box
                                         wxMessageBox("Worker's Pay: " + payString, "Pay Information", wxOK | wxICON_INFORMATION);
                                     }
@@ -594,12 +643,12 @@ private:
                     istringstream iss(line);
                     string fileUsername, filePassword, fileEmployeeType;
                     if (iss >> fileUsername >> filePassword >> fileEmployeeType) {
-if (enteredUsername == fileUsername) {
-    usernameExists = true;
-    cout << "Username already exists. Please choose a different username." << endl;
-    wxMessageBox(_("Username already exists. Please choose a different username."));
-    break;
-}
+                        if (enteredUsername == fileUsername) {
+                            usernameExists = true;
+                            cout << "Username already exists. Please choose a different username." << endl;
+                            wxMessageBox(_("Username already exists. Please choose a different username."));
+                            break;
+                        }
                     }
                 }
                 if (!usernameExists) {
